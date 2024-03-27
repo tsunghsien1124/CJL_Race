@@ -1,0 +1,313 @@
+---------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/logfiles/comparisons
+> .log
+  log type:  text
+ opened on:  15 Nov 2016, 13:25:45
+
+. * benchmarks
+.         correlate lfpavge_r lfkavge_r
+(obs=120,000)
+
+             | lfpavg~r lfkavg~r
+-------------+------------------
+   lfpavge_r |   1.0000
+   lfkavge_r |   0.3458   1.0000
+
+
+. /*      correlate lfkavge_r hh_4_k_r
+>         correlate lfpavge_r hh_4_k_r
+> */
+. * comparisons calibrated
+.         correlate lfpavge_r hchild_bt_r
+(obs=120,000)
+
+             | lfpavg~r hchi~t_r
+-------------+------------------
+   lfpavge_r |   1.0000
+ hchild_bt_r |   0.1394   1.0000
+
+
+.         correlate lfpavge_r hchild_hm_r
+(obs=120,000)
+
+             | lfpavg~r hchi~m_r
+-------------+------------------
+   lfpavge_r |   1.0000
+ hchild_hm_r |   0.2584   1.0000
+
+
+. /*      correlate netincp_r hchild_bt_r
+> *       correlate netincp_r hchild_hm_r
+> *       correlate avgincp_r hchild_bt_r
+> *       correlate avgincp_r hchild_hm_r
+> */
+. log close
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/logfiles/comparisons
+> .log
+  log type:  text
+ closed on:  15 Nov 2016, 13:25:46
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/logfiles/comparisons
+> .log
+  log type:  text
+ opened on:  15 Nov 2016, 13:25:46
+
+. /*      correlate lfpavge_r hh_4_k_r if !upper_iv
+>         correlate lfpavge_r hh_4_k_r if upper_iv
+>         correlate lfpavge_r hchild_bt_r if !upper_bt
+>         correlate lfpavge_r hchild_bt_r if upper_bt
+> 
+> * parents bequests and ige
+>         correlate lfpavge_r lfkavge_r if !upper_iv
+>         correlate lfpavge_r lfkavge_r if upper_iv
+> 
+>         correlate lfpavge_r hchild_bt_r if !upper_bt
+>         correlate lfpavge_r hchild_bt_r if upper_bt
+> 
+>         correlate lfpavge_r hchild_hm_r if !upper_hm
+>         correlate lfpavge_r hchild_hm_r if upper_hm
+> */
+. 
+. * bequests and earnings
+.         correlate ss_4_k_r lfkavge_r
+(obs=120,000)
+
+             | ss_4_k_r lfkavg~r
+-------------+------------------
+    ss_4_k_r |   1.0000
+   lfkavge_r |   0.0485   1.0000
+
+
+.         correlate schild_bt_r hchild_bt_r
+(obs=120,000)
+
+             | schi~t_r hchi~t_r
+-------------+------------------
+ schild_bt_r |   1.0000
+ hchild_bt_r |  -0.4139   1.0000
+
+
+.         correlate schild_hm_r hchild_hm_r
+(obs=120,000)
+
+             | schi~m_r hchi~m_r
+-------------+------------------
+ schild_hm_r |   1.0000
+ hchild_hm_r |  -0.4142   1.0000
+
+
+. 
+. /*      correlate ss_4_k_r lfkavge_r if !upper_iv
+>         correlate ss_4_k_r lfkavge_r if upper_iv
+> 
+>         correlate schild_bt_r hchild_bt_r if !upper_bt
+>         correlate schild_bt_r hchild_bt_r if upper_bt
+> 
+>         correlate schild_hm_r hchild_hm_r if !upper_hm
+>         correlate schild_hm_r hchild_hm_r if upper_hm
+> */
+. log close
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/logfiles/comparisons
+> .log
+  log type:  text
+ closed on:  15 Nov 2016, 13:25:46
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/logfiles/comparisons
+> .log
+  log type:  text
+ opened on:  15 Nov 2016, 13:25:46
+
+. * raw wealth
+. /*      correlate lfpwlth_r hh_4_k_r
+>         correlate lfpavge_r hh_4_k_r if !rich
+>         correlate lfpavge_r hh_4_k_r if rich
+> */
+. 
+. * parent wealth and ige
+.         correlate lfpwlth_r lfkavge_r
+(obs=120,000)
+
+             | lfpwlt~r lfkavg~r
+-------------+------------------
+   lfpwlth_r |   1.0000
+   lfkavge_r |   0.4303   1.0000
+
+
+.         correlate lfpwlth_r hchild_bt_r
+(obs=120,000)
+
+             | lfpwlt~r hchi~t_r
+-------------+------------------
+   lfpwlth_r |   1.0000
+ hchild_bt_r |   0.2222   1.0000
+
+
+.         correlate lfpwlth_r hchild_hm_r
+(obs=120,000)
+
+             | lfpwlt~r hchi~m_r
+-------------+------------------
+   lfpwlth_r |   1.0000
+ hchild_hm_r |   0.3764   1.0000
+
+
+. 
+. /*      correlate lfpavge_r lfkavge_r if !rich
+>         correlate lfpavge_r lfkavge_r if rich
+> 
+>         correlate lfpavge_r hchild_bt_r if !rich
+>         correlate lfpavge_r hchild_bt_r if rich
+> 
+>         correlate lfpavge_r hchild_hm_r if !rich
+>         correlate lfpavge_r hchild_hm_r if rich
+> 
+> * bequests and earnings
+>         correlate ss_4_k_r lfkavge_r if !rich
+>         correlate ss_4_k_r lfkavge_r if rich
+> 
+>         correlate schild_bt_r hchild_bt_r if !rich
+>         correlate schild_bt_r hchild_bt_r if rich
+> 
+>         correlate schild_hm_r hchild_hm_r if !rich
+>         correlate schild_hm_r hchild_hm_r if rich
+> */
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/logfiles/comparisons
+> .log
+  log type:  text
+ closed on:  15 Nov 2016, 13:25:46
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/logfiles/comparisons
+> .log
+  log type:  text
+ opened on:  15 Nov 2016, 13:25:46
+
+. /*      correlate netwlth_r hh_4_k_r
+>         correlate lfpavge_r hh_4_k_r if !rich
+>         correlate lfpavge_r hh_4_k_r if rich
+> */
+. 
+. * parent net wealth and ige
+.         correlate netwlth_r lfkavge_r
+(obs=120,000)
+
+             | netwlt~r lfkavg~r
+-------------+------------------
+   netwlth_r |   1.0000
+   lfkavge_r |   0.1703   1.0000
+
+
+.         correlate netwlth_r hchild_bt_r
+(obs=120,000)
+
+             | netwlt~r hchi~t_r
+-------------+------------------
+   netwlth_r |   1.0000
+ hchild_bt_r |   0.4637   1.0000
+
+
+.         correlate netwlth_r hchild_hm_r
+(obs=120,000)
+
+             | netwlt~r hchi~m_r
+-------------+------------------
+   netwlth_r |   1.0000
+ hchild_hm_r |   0.3020   1.0000
+
+
+. 
+. * parent net inc and ige
+.         correlate netincp_r lfkavge_r
+(obs=120,000)
+
+             | neti~p_r lfkavg~r
+-------------+------------------
+   netincp_r |   1.0000
+   lfkavge_r |   0.0018   1.0000
+
+
+.         correlate netincp_r hchild_bt_r
+(obs=120,000)
+
+             | neti~p_r hchi~t_r
+-------------+------------------
+   netincp_r |   1.0000
+ hchild_bt_r |   0.3588   1.0000
+
+
+.         correlate netincp_r hchild_hm_r
+(obs=120,000)
+
+             | neti~p_r hchi~m_r
+-------------+------------------
+   netincp_r |   1.0000
+ hchild_hm_r |   0.1482   1.0000
+
+
+. 
+. * parent net inc and ige
+.         correlate ss_4_p_r lfkavge_r
+(obs=120,000)
+
+             | ss_4_p_r lfkavg~r
+-------------+------------------
+    ss_4_p_r |   1.0000
+   lfkavge_r |   0.2760   1.0000
+
+
+.         correlate ss_4_p_r hchild_bt_r
+(obs=120,000)
+
+             | ss_4_p_r hchi~t_r
+-------------+------------------
+    ss_4_p_r |   1.0000
+ hchild_bt_r |   0.2632   1.0000
+
+
+.         correlate ss_4_p_r hchild_hm_r
+(obs=120,000)
+
+             | ss_4_p_r hchi~m_r
+-------------+------------------
+    ss_4_p_r |   1.0000
+ hchild_hm_r |   0.3037   1.0000
+
+
+. 
+. /*      correlate lfpavge_r lfkavge_r if !rich
+>         correlate lfpavge_r lfkavge_r if rich
+> 
+>         correlate lfpavge_r hchild_bt_r if !rich
+>         correlate lfpavge_r hchild_bt_r if rich
+> 
+>         correlate lfpavge_r hchild_hm_r if !rich
+>         correlate lfpavge_r hchild_hm_r if rich
+> 
+> * bequests and earnings
+>         correlate ss_4_k_r lfkavge_r if !rich
+>         correlate ss_4_k_r lfkavge_r if rich
+> 
+>         correlate schild_bt_r hchild_bt_r if !rich
+>         correlate schild_bt_r hchild_bt_r if rich
+> 
+>         correlate schild_hm_r hchild_hm_r if !rich
+>         correlate schild_hm_r hchild_hm_r if rich
+> */
+. log close
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/logfiles/comparisons
+> .log
+  log type:  text
+ closed on:  15 Nov 2016, 13:25:46
+---------------------------------------------------------------------------------

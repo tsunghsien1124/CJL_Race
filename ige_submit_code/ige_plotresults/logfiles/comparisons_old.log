@@ -1,0 +1,395 @@
+--------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/comparisons.log
+  log type:  text
+ opened on:  26 Oct 2016, 23:15:10
+
+. * benchmarks
+.         correlate lfpavge_r lfkavge_r
+(obs=120,000)
+
+             | lfpavg~r lfkavg~r
+-------------+------------------
+   lfpavge_r |   1.0000
+   lfkavge_r |   0.3458   1.0000
+
+
+.         correlate lfkavge_r hh_4_k_r
+(obs=120,000)
+
+             | lfkavg~r hh_4_k_r
+-------------+------------------
+   lfkavge_r |   1.0000
+    hh_4_k_r |   0.7890   1.0000
+
+
+.         correlate lfpavge_r hh_4_k_r
+(obs=120,000)
+
+             | lfpavg~r hh_4_k_r
+-------------+------------------
+   lfpavge_r |   1.0000
+    hh_4_k_r |   0.4201   1.0000
+
+
+. 
+. * comparisons calibrated
+.         correlate netincp_r hchild_bt_r
+(obs=120,000)
+
+             | neti~p_r hchi~t_r
+-------------+------------------
+   netincp_r |   1.0000
+ hchild_bt_r |   0.2400   1.0000
+
+
+.         correlate avgincp_r hchild_hm_r
+(obs=120,000)
+
+             | avgi~p_r hchi~m_r
+-------------+------------------
+   avgincp_r |   1.0000
+ hchild_hm_r |   0.0223   1.0000
+
+
+. log close
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/comparisons.log
+  log type:  text
+ closed on:  26 Oct 2016, 23:15:10
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/comparisons.log
+  log type:  text
+ opened on:  26 Oct 2016, 23:15:10
+
+.         correlate lfpavge_r hh_4_k_r if !upper_iv
+(obs=60,000)
+
+             | lfpavg~r hh_4_k_r
+-------------+------------------
+   lfpavge_r |   1.0000
+    hh_4_k_r |   0.5596   1.0000
+
+
+.         correlate lfpavge_r hh_4_k_r if upper_iv
+(obs=60,000)
+
+             | lfpavg~r hh_4_k_r
+-------------+------------------
+   lfpavge_r |   1.0000
+    hh_4_k_r |   0.3516   1.0000
+
+
+. 
+.         correlate lfpavge_r lfkavge_r if !upper_iv
+(obs=60,000)
+
+             | lfpavg~r lfkavg~r
+-------------+------------------
+   lfpavge_r |   1.0000
+   lfkavge_r |   0.5288   1.0000
+
+
+.         correlate lfpavge_r lfkavge_r if upper_iv
+(obs=60,000)
+
+             | lfpavg~r lfkavg~r
+-------------+------------------
+   lfpavge_r |   1.0000
+   lfkavge_r |   0.3573   1.0000
+
+
+. 
+.         correlate netincp_r hchild_bt_r if !upper_bt
+(obs=60,000)
+
+             | neti~p_r hchi~t_r
+-------------+------------------
+   netincp_r |   1.0000
+ hchild_bt_r |   0.6439   1.0000
+
+
+.         correlate netincp_r hchild_bt_r if upper_bt
+(obs=60,000)
+
+             | neti~p_r hchi~t_r
+-------------+------------------
+   netincp_r |   1.0000
+ hchild_bt_r |   0.2929   1.0000
+
+
+. 
+.         correlate avgincp_r hchild_hm_r if !upper_hm
+(obs=60,000)
+
+             | avgi~p_r hchi~m_r
+-------------+------------------
+   avgincp_r |   1.0000
+ hchild_hm_r |   0.4172   1.0000
+
+
+.         correlate avgincp_r hchild_hm_r if upper_hm
+(obs=60,000)
+
+             | avgi~p_r hchi~m_r
+-------------+------------------
+   avgincp_r |   1.0000
+ hchild_hm_r |   0.3177   1.0000
+
+
+. log close
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/comparisons.log
+  log type:  text
+ closed on:  26 Oct 2016, 23:15:10
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/comparisons.log
+  log type:  text
+ opened on:  26 Oct 2016, 23:15:10
+
+. * raw wealth
+.         correlate lfpwlth_r hh_4_k_r
+(obs=120,000)
+
+             | lfpwlt~r hh_4_k_r
+-------------+------------------
+   lfpwlth_r |   1.0000
+    hh_4_k_r |   0.6314   1.0000
+
+
+.         correlate lfpavge_r hh_4_k_r if !rich
+(obs=60,000)
+
+             | lfpavg~r hh_4_k_r
+-------------+------------------
+   lfpavge_r |   1.0000
+    hh_4_k_r |   0.2553   1.0000
+
+
+.         correlate lfpavge_r hh_4_k_r if rich
+(obs=60,000)
+
+             | lfpavg~r hh_4_k_r
+-------------+------------------
+   lfpavge_r |   1.0000
+    hh_4_k_r |  -0.0037   1.0000
+
+
+. 
+.         correlate lfpwlth_r lfkavge_r
+(obs=120,000)
+
+             | lfpwlt~r lfkavg~r
+-------------+------------------
+   lfpwlth_r |   1.0000
+   lfkavge_r |   0.4303   1.0000
+
+
+.         correlate lfpavge_r lfkavge_r if !rich
+(obs=60,000)
+
+             | lfpavg~r lfkavg~r
+-------------+------------------
+   lfpavge_r |   1.0000
+   lfkavge_r |   0.2720   1.0000
+
+
+.         correlate lfpavge_r lfkavge_r if rich
+(obs=60,000)
+
+             | lfpavg~r lfkavg~r
+-------------+------------------
+   lfpavge_r |   1.0000
+   lfkavge_r |   0.0984   1.0000
+
+
+. 
+.         correlate lfpwlth_r hchild_bt_r
+(obs=120,000)
+
+             | lfpwlt~r hchi~t_r
+-------------+------------------
+   lfpwlth_r |   1.0000
+ hchild_bt_r |   0.1757   1.0000
+
+
+.         correlate netincp_r hchild_bt_r if !rich
+(obs=60,000)
+
+             | neti~p_r hchi~t_r
+-------------+------------------
+   netincp_r |   1.0000
+ hchild_bt_r |   0.2910   1.0000
+
+
+.         correlate netincp_r hchild_bt_r if rich
+(obs=60,000)
+
+             | neti~p_r hchi~t_r
+-------------+------------------
+   netincp_r |   1.0000
+ hchild_bt_r |   0.1971   1.0000
+
+
+. 
+.         correlate lfpwlth_r hchild_hm_r
+(obs=120,000)
+
+             | lfpwlt~r hchi~m_r
+-------------+------------------
+   lfpwlth_r |   1.0000
+ hchild_hm_r |   0.5328   1.0000
+
+
+.         correlate avgincp_r hchild_hm_r if !rich
+(obs=60,000)
+
+             | avgi~p_r hchi~m_r
+-------------+------------------
+   avgincp_r |   1.0000
+ hchild_hm_r |   0.0120   1.0000
+
+
+.         correlate avgincp_r hchild_hm_r if rich
+(obs=60,000)
+
+             | avgi~p_r hchi~m_r
+-------------+------------------
+   avgincp_r |   1.0000
+ hchild_hm_r |   0.0402   1.0000
+
+
+. log close
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/comparisons.log
+  log type:  text
+ closed on:  26 Oct 2016, 23:15:10
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/comparisons.log
+  log type:  text
+ opened on:  26 Oct 2016, 23:15:10
+
+. * net wealth
+.         correlate netwlth_r hh_4_k_r
+(obs=120,000)
+
+             | netwlt~r hh_4_k_r
+-------------+------------------
+   netwlth_r |   1.0000
+    hh_4_k_r |   0.3124   1.0000
+
+
+.         correlate lfpavge_r hh_4_k_r if !rich
+(obs=60,000)
+
+             | lfpavg~r hh_4_k_r
+-------------+------------------
+   lfpavge_r |   1.0000
+    hh_4_k_r |   0.5076   1.0000
+
+
+.         correlate lfpavge_r hh_4_k_r if rich
+(obs=60,000)
+
+             | lfpavg~r hh_4_k_r
+-------------+------------------
+   lfpavge_r |   1.0000
+    hh_4_k_r |   0.3608   1.0000
+
+
+. 
+.         correlate netwlth_r lfkavge_r
+(obs=120,000)
+
+             | netwlt~r lfkavg~r
+-------------+------------------
+   netwlth_r |   1.0000
+   lfkavge_r |   0.1703   1.0000
+
+
+.         correlate lfpavge_r lfkavge_r if !rich
+(obs=60,000)
+
+             | lfpavg~r lfkavg~r
+-------------+------------------
+   lfpavge_r |   1.0000
+   lfkavge_r |   0.3855   1.0000
+
+
+.         correlate lfpavge_r lfkavge_r if rich
+(obs=60,000)
+
+             | lfpavg~r lfkavg~r
+-------------+------------------
+   lfpavge_r |   1.0000
+   lfkavge_r |   0.3107   1.0000
+
+
+. 
+.         correlate netwlth_r hchild_bt_r
+(obs=120,000)
+
+             | netwlt~r hchi~t_r
+-------------+------------------
+   netwlth_r |   1.0000
+ hchild_bt_r |   0.2801   1.0000
+
+
+.         correlate netincp_r hchild_bt_r if !rich
+(obs=60,000)
+
+             | neti~p_r hchi~t_r
+-------------+------------------
+   netincp_r |   1.0000
+ hchild_bt_r |   0.2895   1.0000
+
+
+.         correlate netincp_r hchild_bt_r if rich
+(obs=60,000)
+
+             | neti~p_r hchi~t_r
+-------------+------------------
+   netincp_r |   1.0000
+ hchild_bt_r |   0.0377   1.0000
+
+
+. 
+.         correlate netwlth_r hchild_hm_r
+(obs=120,000)
+
+             | netwlt~r hchi~m_r
+-------------+------------------
+   netwlth_r |   1.0000
+ hchild_hm_r |   0.3056   1.0000
+
+
+.         correlate avgincp_r hchild_hm_r if !rich
+(obs=60,000)
+
+             | avgi~p_r hchi~m_r
+-------------+------------------
+   avgincp_r |   1.0000
+ hchild_hm_r |  -0.0837   1.0000
+
+
+.         correlate avgincp_r hchild_hm_r if rich
+(obs=60,000)
+
+             | avgi~p_r hchi~m_r
+-------------+------------------
+   avgincp_r |   1.0000
+ hchild_hm_r |  -0.2409   1.0000
+
+
+. log close
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/comparisons.log
+  log type:  text
+ closed on:  26 Oct 2016, 23:15:11
+--------------------------------------------------------------------------------

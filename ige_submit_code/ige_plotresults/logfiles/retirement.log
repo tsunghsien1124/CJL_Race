@@ -1,0 +1,132 @@
+---------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/logfiles/retirement.
+> log
+  log type:  text
+ opened on:  21 Nov 2016, 04:55:16
+
+. log close
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/logfiles/retirement.
+> log
+  log type:  text
+ closed on:  21 Nov 2016, 04:55:16
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/logfiles/retirement.
+> log
+  log type:  text
+ opened on:  21 Nov 2016, 04:55:16
+0
+(obs=120,000)
+
+             |  lfkearn  retwlth
+-------------+------------------
+     lfkearn |   1.0000
+     retwlth |   0.8179   1.0000
+
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/logfiles/retirement.
+> log
+  log type:  text
+ closed on:  21 Nov 2016, 04:55:16
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/logfiles/retirement.
+> log
+  log type:  text
+ opened on:  21 Nov 2016, 04:55:16
+0
+.99878865
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/logfiles/retirement.
+> log
+  log type:  text
+ closed on:  21 Nov 2016, 04:55:16
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/logfiles/retirement.
+> log
+  log type:  text
+ opened on:  21 Nov 2016, 04:55:19
+0
+
+     +--------------------------------------------------------------------------+
+ 11. | earndec |  lfmean |   ssmean | ratemean |    lfmed |    ssmed |  ratemed |
+     |       . | .080455 | 21.10331 | 72.73139 | .0639632 | 15.11264 | 58.16161 |
+     |--------------------------------------------------------------------------|
+     |           tmean        |            tmed        |            gini        |
+     |        63.91418        |        57.57177        |        .4367206        |
+     +--------------------------------------------------------------------------+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+        gini |         10    .3081176    .1056081   .1867487   .4968114
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/logfiles/retirement.
+> log
+  log type:  text
+ closed on:  21 Nov 2016, 04:55:19
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/logfiles/retirement.
+> log
+  log type:  text
+ opened on:  21 Nov 2016, 04:55:20
+1
+(obs=119,999)
+
+             |  lfkearn  retwlth
+-------------+------------------
+     lfkearn |   1.0000
+     retwlth |   0.8179   1.0000
+
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/logfiles/retirement.
+> log
+  log type:  text
+ closed on:  21 Nov 2016, 04:55:20
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/logfiles/retirement.
+> log
+  log type:  text
+ opened on:  21 Nov 2016, 04:55:20
+1
+.99878008
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/logfiles/retirement.
+> log
+  log type:  text
+ closed on:  21 Nov 2016, 04:55:20
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/logfiles/retirement.
+> log
+  log type:  text
+ opened on:  21 Nov 2016, 04:55:24
+1
+
+     +----------------------------------------------------------------+
+ 11. | earndec |   lfmean |   ssmean | ratemean |    lfmed |    ssmed |
+     |       . | .0804556 | 21.10349 |   72.732 | .0639632 | 15.11276 |
+     |-------------------------------+--------------------------------|
+     |    ratemed    |      tmean    |       tmed    |        gini    |
+     |   58.16264    |   63.91428    |   57.57224    |    .4367158    |
+     +----------------------------------------------------------------+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+        gini |         10    .3081174    .1055971   .1867487   .4967641
+      name:  <unnamed>
+       log:  /home/sylee/now/ananth/natnurt/stata_final_real/logfiles/retirement.
+> log
+  log type:  text
+ closed on:  21 Nov 2016, 04:55:24
+---------------------------------------------------------------------------------

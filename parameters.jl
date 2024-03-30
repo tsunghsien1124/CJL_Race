@@ -41,8 +41,8 @@ function parameters_function(;
     a_σ::Real=0.30,                             # standard deviaiton of learning ability
     b::Real=0.83,                               # Ben-Porath human capital accumulation
     ζ::Real=3.11,                               # kid to adult human capital anchor
-    ω_1::Real=0.56,                             # primary productivity of kid investment
-    ω_2::Real=0.30,                             # secondary productivity of kid investment
+    ω_1::Real=0.56,                             # primary productivity of kid's investment
+    ω_2::Real=0.30,                             # secondary productivity of kid's investment
     ψ_1::Real=0.23,                             # preference for kid to college with high school parent
     ψ_2::Real=0.24,                             # preference for kid to college with college parent
     #-------------------------#
@@ -55,7 +55,13 @@ function parameters_function(;
     ϵ_size::Integer=2,                          # number of market luck shock
     a_size::Integer=3,                          # number of learning ability shock
     h_size::Integer=12,                         # number of human capital
+    h_power::Integer=2,                         # grid power of human capital
+    h_frac::Real=20.0,                          # upper bound scale of human capital
+    hk_frac::Real=0.25,                         # upper bound scale of kid's human capital
     s_size::Integer=24,                         # number of asset choice
+    s_power::Integer=2,                         # grid power of asset choice
+    s_frac::Real=6.0,                           # upper bound scale of asset choices
+    sk_frac::Real=1.25,                         # upper bound scale of kid's asset choices
 )
     """
     contruct an immutable object of all paramters
@@ -63,10 +69,12 @@ function parameters_function(;
     # aggregate prices
     r = (1.0 + r_0)^age_periods - 1.0
     R = (1.0 + r_0 + δ)^age_periods - 1.0
+    W_0 = (1.0 - α) * (α / R)^(α / (1.0 - α))
+    W = W_0 * A
 
     # average earnings and income
-    PSID_avg_earnings = 38674.2
-    e_bar = 1.0
+    PSID_avg_earnings = 38674.2     # psidavgearn
+    e_bar = 1.0                     # nmdlavgearn
     inc_bar = e_bar * (1.0 + (r / R) * (α / (1.0 - α)))
 
     # age
@@ -80,17 +88,20 @@ function parameters_function(;
 
     # human capital (parent and kid)
     h_min = 0.0
-    h_max =
-        h_power =
-            h_step, h_grid = h_grid_function(h_size, h_min, h_max, h_power)
+    h_max = e_bar / W * h_frac
+    h_step, h_grid = h_grid_function(h_size, h_min, h_max, h_power)
 
-    # asset holding
+    hk_max = h_max * hk_frac
+    hk_step, hk_grid = h_grid_function(h_size, h_min, hk_max, h_power)
 
-    e_bar = 1.0
-    s_min =
-        s_max =
-            s_power =
-                s_step, s_grid = h_grid_function(s_size, s_min, s_max, s_power)
+    # asset choices
+    s_min = -g / (1.0 + r)
+    s_max = e_bar * s_frac
+    s_step, s_grid = h_grid_function(s_size, s_min, s_max, s_power)
+
+    sk_min = 0.0
+    sk_max = s_max * sk_frac
+    sk_step, sk_grid = h_grid_function(s_size, sk_min, sk_max, s_power)
 
     # persistent income shock
     ϵ_MC = tauchen(ϵ_size, ρ, σ_ϵ, 0.0, 3)

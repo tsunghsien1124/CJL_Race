@@ -11,4 +11,11 @@ using DelimitedFiles
 #==================#
 include("functions.jl")
 include("parameters.jl")
+include("variables.jl")
+include("old_parent.jl")
 
+#======#
+# Test #
+#======#
+parameters = parameters_function();
+variabels = variables_function(parameters);

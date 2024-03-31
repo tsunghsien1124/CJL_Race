@@ -7,11 +7,11 @@ function ϵ_grid_function(ϵ_size::Integer, ϵ_μ::Vector{Float64}, ϵ_σ::Vecto
         c_size: grid size of degree indicator (1: high school; 2: college), i.e., c_size = 2 
     """
     ϵ_grid = zeros(ϵ_size, c_size)
-    for c_i = 1:c_size,
+    for c_i = 1:c_size
         dist = Normal(ϵ_μ[c_i], ϵ_σ[c_i])
 
         for ϵ_i = 1:ϵ_size
-            ϵ_grid[ϵ_i, c_i] = quantile(dist, (ϵ_i - 0.5) / ϵ_size)
+            ϵ_grid[ϵ_i, c_i] = exp(quantile(dist, (ϵ_i - 0.5) / ϵ_size))
         end
     end
     return ϵ_grid
@@ -25,10 +25,21 @@ function a_grid_function(a_size::Integer, a_ρ::Real, a_σ::Real, a_μ::Real)
         a_σ: standard deviaiton of ability shock
         a_μ: mean of ability shock
     """
-    a_MC = rouwenhorst(a_size, a_ρ, a_σ, μ=a_μ)
+    # (1) using QuantEcon's function "rouwenhorst"
+    # a_MC = rouwenhorst(a_size, a_ρ, a_σ, a_μ)
+    # a_Γ = a_MC.p
+    # a_grid = collect(a_MC.state_values)
+    # a_birth = stationary_distributions(MarkovChain(a_Γ, a_grid))[1]
+    # return a_Γ, a_grid, a_birth
+
+    # (2) following Lee and Seshadri's code implementation
+    a_MC = rouwenhorst(a_size, a_ρ, a_σ)
     a_Γ = a_MC.p
-    a_grid = collect(a_MC.state_values)
+    a_grid = exp.(collect(a_MC.state_values))
     a_birth = stationary_distributions(MarkovChain(a_Γ, a_grid))[1]
+    a_grid = a_grid ./ sum(a_birth .* a_grid)
+    a_grid = a_grid .* a_μ
+    # mean_log_a = sum(a_birth .* log.(a_grid)) # mean of log normalized a grid
     return a_Γ, a_grid, a_birth
 end
 

@@ -8,6 +8,7 @@ using DelimitedFiles
 # using JuMP
 # import Ipopt
 using Optim
+using ProgressMeter
 
 #==================#
 # Import Functions #

@@ -9,10 +9,16 @@ function age_9_function!(variables::Mutable_Variables, prices::Mutable_Prices, p
         states = [h_k_i, a_k_i, c_k_i, s_i, h_i, a_i, c_i]
         choices_candidate = [(x_1, x_2, x_3) for x_1 = 0.0:0.1:1.0, x_2 = 0.0:0.1:1.0, x_3 = 0.0:0.1:1.0]
         choices_initial = collect(choices_candidate[findmin(age_9_obj_function.(choices_candidate))[2]])
+        choices_initial[choices_initial .== 0.0] .= 0.1
+        choices_initial[choices_initial .== 1.0] .= 0.9
         # choices_initial = [0.5, 0.5, 0.5]
         choices_lb = [0.0, 0.0, 0.0]
         choices_ub = [1.0, 1.0, 1.0]
-        res = optimize(age_9_obj_function, choices_lb, choices_ub, choices_initial, Fminbox(NelderMead()))
+        res = optimize(age_9_obj_function, choices_lb, choices_ub, choices_initial, Fminbox(NelderMead()));
+        variables.V_9[h_k_i, a_k_i, c_k_i, s_i, h_i, a_i, c_i] = -res.minimum
+        variables.policy_n_9[h_k_i, a_k_i, c_k_i, s_i, h_i, a_i, c_i] = res.minimizer[1]
+        variables.policy_s_10[h_k_i, a_k_i, c_k_i, s_i, h_i, a_i, c_i] = res.minimizer[2]
+        variables.policy_s_4[h_k_i, a_k_i, c_k_i, s_i, h_i, a_i, c_i] = res.minimizer[3]
     end
 end
 

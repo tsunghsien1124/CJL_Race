@@ -25,4 +25,5 @@ parameters = parameters_function();
 prices = prices_function(parameters);
 variables = variables_function(prices, parameters);
 
-age_10_function!(variables, prices, parameters)
+age_10_function!(variables, prices, parameters);
+age_9_function!(variables, prices, parameters);

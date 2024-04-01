@@ -37,9 +37,9 @@ function variables_function(parameters::NamedTuple)
     @unpack c_size, a_size, h_size, s_size = parameters
 
     # j = 4 (independece)
-    V_4 = zeros(c_size, a_size, h_size, s_size)
-    policy_s_5 = zeros(c_size, a_size, h_size, s_size)
-    policy_n_4 = zeros(c_size, a_size, h_size, s_size)
+    V_4 = zeros(s_size, h_size, a_size, c_size)
+    policy_s_5 = zeros(s_size, h_size, a_size, c_size)
+    policy_n_4 = zeros(s_size, h_size, a_size, c_size)
 
     # j = 5 (child investment)
     V_5 = zeros(a_size, c_size, a_size, h_size, s_size)
@@ -68,13 +68,13 @@ function variables_function(parameters::NamedTuple)
     policy_c_3 = zeros(a_size, h_size, c_size, a_size, h_size, s_size)
 
     # j = 9 (inter vivos)
-    V_9 = zeros(c_size, a_size, h_size, c_size, a_size, h_size, s_size)
-    policy_s_10 = zeros(c_size, a_size, h_size, c_size, a_size, h_size, s_size)
-    policy_n_9 = zeros(c_size, a_size, h_size, c_size, a_size, h_size, s_size)
-    policy_s_4 = zeros(c_size, a_size, h_size, c_size, a_size, h_size, s_size)
+    V_9 = zeros(h_size, a_size, c_size, s_size, h_size, a_size, c_size)
+    policy_s_10 = zeros(h_size, a_size, c_size, s_size, h_size, a_size, c_size)
+    policy_n_9 = zeros(h_size, a_size, c_size, s_size, h_size, a_size, c_size)
+    policy_s_4 = zeros(h_size, a_size, c_size, s_size, h_size, a_size, c_size)
 
     # j = 10 (deterministic)
-    V_10 = zeros(c_size, h_size, s_size)
+    V_10 = zeros(s_size, h_size, c_size)
 
     # return all variable placeholders
     variables = Mutable_Variables(
@@ -112,5 +112,24 @@ mutable struct Mutable_Prices
     """
     construct a type for mutable prices (to be solved in general equlibrium)
     """
-    W_S::Vector{Float64}
+    w_S::Vector{Float64}
+end
+
+function prices_function(parameters::NamedTuple)
+    """
+    construct a mutable object containing equlibrium prices
+    """
+    @unpack ν, σ, W = parameters
+
+    # degree-dependent wage
+    EP = 1.57
+    L_1 = 0.48
+    ratio_w_1_to_w_0 = ((1.0 - ν) / ν)^(1.0 / σ) * ((L_1 / (1.0 - L_1)) * EP)^((σ - 1.0) / σ)
+    w_0 = W * (ν^(1.0 / (1.0 - σ)) + (1.0 - ν)^(1.0 / (1.0 - σ)) * ratio_w_1_to_w_0^(σ / (σ - 1.0)))^((1.0 - σ) / σ)
+    w_1 = w_0 * ratio_w_1_to_w_0
+    w_S = [w_0, w_1]
+
+    # return all variable placeholders
+    prices = Mutable_Prices(w_S)
+    return prices
 end

@@ -5,6 +5,9 @@ using Distributions: Normal, quantile
 using QuantEcon: rouwenhorst, stationary_distributions, MarkovChain
 using Parameters: @unpack
 using DelimitedFiles
+# using JuMP
+# import Ipopt
+using Optim
 
 #==================#
 # Import Functions #
@@ -12,10 +15,14 @@ using DelimitedFiles
 include("functions.jl")
 include("parameters.jl")
 include("variables.jl")
-include("old_parent.jl")
+include("age_10.jl")
+include("age_9.jl")
 
 #======#
 # Test #
 #======#
 parameters = parameters_function();
-variabels = variables_function(parameters);
+variables = variables_function(parameters);
+prices = prices_function(parameters);
+
+age_10_function!(variables, prices, parameters)

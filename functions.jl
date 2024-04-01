@@ -167,14 +167,14 @@ function locate_s_function(s::Real, parameters::NamedTuple)
     return s_ind, s_wgt
 end
 
-function locate_s_kid_function(s_k::Real, parameters::NamedTuple)
+function locate_s_kid_function(s_k, parameters::NamedTuple)
     """
     locate s_k on its grid with indices and convex weights
         s_k: kid's savings
         parameters: collection of parameters
     """
-    @unpack s_k_size, s_k_step, s_k_min, s_k_power, s_k_grid = parameters
-    s_k_ind_lower = max(1, min(s_k_size - 1, floor(Int, ((s_k - s_k_min) / s_k_step)^(1.0 / s_k_power) + 1)))
+    @unpack s_size, s_k_step, s_k_min, s_power, s_k_grid = parameters
+    s_k_ind_lower = max(1, min(s_size - 1, floor(Int, ((s_k - s_k_min) / s_k_step)^(1.0 / s_power) + 1))) # findlast(s_k .>= s_k_grid)
     s_k_ind_upper = s_k_ind_lower + 1
     s_k_wgt_lower = (s_k_grid[s_k_ind_upper] - s_k) / (s_k_grid[s_k_ind_upper] - s_k_grid[s_k_ind_lower])
     s_k_wgt_upper = 1.0 - s_k_wgt_lower
@@ -184,12 +184,13 @@ function locate_s_kid_function(s_k::Real, parameters::NamedTuple)
     return s_k_ind, s_k_wgt
 end
 
-function utility_function(c::Real, χ::Real)
+function utility_function(c::Real, parameters::NamedTuple)
     """
     utility function with normalization factor
         c: comsumption
         χ: CRRA coefficient
     """
+    @unpack β, θ, χ = parameters
     if c > 0.0
         normal_factor = (1.0 - β) * (1 - β^5 * θ) / (1.0 - β^9)
         return normal_factor * (c^(1.0 - χ) / (1.0 - χ))
@@ -204,12 +205,11 @@ function tax_rate_function(y::Real, parameters::NamedTuple)
         y: period income
         parameters: collection of parameters
     """
-    @unpack τ_0, τ_1, e_bar, r, R, α = parameters
+    @unpack τ_0, τ_1, inc_bar = parameters
     if y <= 0.0
         return 0.0
     else
-        y_bar = e_bar * (1.0 + (r / R) * (α / (1.0 - α)))
-        tax_rate = τ_0 + τ_1 * log(y / y_bar)
+        tax_rate = τ_0 + τ_1 * log(y / inc_bar)
         return max(0.0, min(1.0, tax_rate))
     end
 end

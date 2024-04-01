@@ -6,9 +6,9 @@ function parameters_function(;
     α::Real=0.32,                               # capital share
     δ::Real=0.07,                               # depreciation rate
     σ::Real=1.0 - 1.0 / 1.44,                   # CES elasticity
-    γ_0::Real=0.90,                             # share of time investment in kid's skill formation
-    γ_1::Real=0.71,                             # share of time investment in kid's skill formation
-    γ_2::Real=0.68,                             # share of time investment in kid's skill formation
+    γ_0::Real=0.90,                             # share of time investment in kid's s_kill formation
+    γ_1::Real=0.71,                             # share of time investment in kid's s_kill formation
+    γ_2::Real=0.68,                             # share of time investment in kid's s_kill formation
     r_0::Real=0.04,                             # annual interest rate
     τ_0::Real=0.10,                             # intercept of progressive income tax
     τ_1::Real=0.04,                             # slope of progressive income tax
@@ -17,6 +17,7 @@ function parameters_function(;
     p_1::Real=0.33,                             # intercept of social security payment 
     p_0::Real=0.08,                             # slope of social security payment
     τ_s::Real=0.11,                             # payroll tax
+    τ_k::Real=0.15,                             # interest income tax fpr retirees
     d_0::Real=0.02,                             # public subsidy in kid's education
     d_1::Real=0.09,                             # public subsidy in kid's education
     d_2::Real=0.10,                             # public subsidy in kid's education
@@ -39,7 +40,7 @@ function parameters_function(;
     a_ρ::Real=0.23,                             # persistence of learning ability
     a_μ::Real=0.83,                             # mean of learning ability
     a_σ::Real=0.30,                             # standard deviaiton of learning ability
-    b::Real=0.83,                               # Ben-Porath human capital accumulation
+    b::Real=0.81,                               # Ben-Porath human capital accumulation
     ζ::Real=3.11,                               # kid to adult human capital anchor
     ω_1::Real=0.56,                             # primary productivity of kid's investment
     ω_2::Real=0.30,                             # secondary productivity of kid's investment
@@ -57,11 +58,11 @@ function parameters_function(;
     h_size::Integer=12,                         # number of human capital
     h_power::Integer=2,                         # grid power of human capital
     h_frac::Real=20.0,                          # upper bound scale of human capital
-    hk_frac::Real=0.25,                         # upper bound scale of kid's human capital
+    h_k_frac::Real=0.25,                         # upper bound scale of kid's human capital
     s_size::Integer=24,                         # number of asset choice
     s_power::Integer=2,                         # grid power of asset choice
     s_frac::Real=6.0,                           # upper bound scale of asset choices
-    sk_frac::Real=1.25,                         # upper bound scale of kid's asset choices
+    s_k_frac::Real=1.25,                         # upper bound scale of kid's asset choices
 )
     """
     contruct an immutable object of all paramters
@@ -91,17 +92,17 @@ function parameters_function(;
     h_max = e_bar / W * h_frac
     h_step, h_grid = h_grid_function(h_size, h_min, h_max, h_power)
 
-    hk_max = h_max * hk_frac
-    hk_step, hk_grid = h_grid_function(h_size, h_min, hk_max, h_power)
+    h_k_max = h_max * h_k_frac
+    h_k_step, h_k_grid = h_grid_function(h_size, h_min, h_k_max, h_power)
 
     # saving or borrowing (parent and kid)
     s_min = -g / (1.0 + r)
     s_max = e_bar * s_frac
     s_step, s_grid = h_grid_function(s_size, s_min, s_max, s_power)
 
-    sk_min = 0.0
-    sk_max = s_max * sk_frac
-    sk_step, sk_grid = h_grid_function(s_size, sk_min, sk_max, s_power)
+    s_k_min = 0.0
+    s_k_max = s_max * s_k_frac
+    s_k_step, s_k_grid = h_grid_function(s_size, s_k_min, s_k_max, s_power)
 
     # return values
     return (
@@ -120,6 +121,7 @@ function parameters_function(;
         p_1 = p_1,
         p_0 = p_0,
         τ_s = τ_s,
+        τ_k = τ_k,
         d_0 = d_0,
         d_1 = d_1,
         d_2 = d_2,
@@ -163,25 +165,25 @@ function parameters_function(;
         h_size = h_size,
         h_power = h_power,
         h_frac = h_frac,
-        hk_frac = hk_frac,
+        h_k_frac = h_k_frac,
         h_min = h_min,
         h_max = h_max,
         h_step = h_step,
         h_grid = h_grid,
-        hk_max = hk_max,
-        hk_step = hk_step,
-        hk_grid = hk_grid,
+        h_k_max = h_k_max,
+        h_k_step = h_k_step,
+        h_k_grid = h_k_grid,
         s_size = s_size,
         s_power = s_power,
         s_frac = s_frac,
-        sk_frac = sk_frac,
+        s_k_frac = s_k_frac,
         s_min = s_min,
         s_max = s_max,
         s_step = s_step,
         s_grid = s_grid,
-        sk_min = sk_min,
-        sk_max = sk_max,
-        sk_step = sk_step, 
-        sk_grid = sk_grid,        
+        s_k_min = s_k_min,
+        s_k_max = s_k_max,
+        s_k_step = s_k_step, 
+        s_k_grid = s_k_grid,        
     )
 end

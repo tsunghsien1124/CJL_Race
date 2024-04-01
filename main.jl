@@ -22,7 +22,7 @@ include("age_9.jl")
 # Test #
 #======#
 parameters = parameters_function();
-variables = variables_function(parameters);
 prices = prices_function(parameters);
+variables = variables_function(prices, parameters);
 
 age_10_function!(variables, prices, parameters)

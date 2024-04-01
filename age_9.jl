@@ -2,12 +2,14 @@ function age_9_function!(variables::Mutable_Variables, prices::Mutable_Prices, p
     """
     solve the financial transfer problem of households
     """
-    @unpack c_size, h_size, h_grid, s_size = parameters
+    @unpack c_size, a_size, h_size, h_grid, s_size = parameters
 
     # V_9 = zeros(h_size, a_size, c_size, s_size, h_size, a_size, c_size)
     for c_i = 1:c_size, a_i = 1:a_size, h_i = 1:h_size, s_i = 1:s_size, c_k_i = 1:c_size, a_k_i = 1:a_size, h_k_i = 1:h_size
         states = [h_k_i, a_k_i, c_k_i, s_i, h_i, a_i, c_i]
-        choices_initial = [0.5, 0.5, 0.5]
+        choices_candidate = [(x_1, x_2, x_3) for x_1 = 0.0:0.1:1.0, x_2 = 0.0:0.1:1.0, x_3 = 0.0:0.1:1.0]
+        choices_initial = collect(choices_candidate[findmin(age_9_obj_function.(choices_candidate))[2]])
+        # choices_initial = [0.5, 0.5, 0.5]
         choices_lb = [0.0, 0.0, 0.0]
         choices_ub = [1.0, 1.0, 1.0]
         res = optimize(age_9_obj_function, choices_lb, choices_ub, choices_initial, Fminbox(NelderMead()))

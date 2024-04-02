@@ -13,7 +13,7 @@ function parameters_function(;
     τ_0::Real=0.10,                             # intercept of progressive income tax
     τ_1::Real=0.04,                             # slope of progressive income tax
     g::Real=0.03,                               # government welfare transfer
-    q_A::Real=1.70,                             # adult equivalance scale
+    q_A::Real=1.70,                             # adult consumption equivalance scale in data
     p_1::Real=0.33,                             # intercept of social security payment 
     p_0::Real=0.08,                             # slope of social security payment
     τ_s::Real=0.11,                             # payroll tax
@@ -21,7 +21,8 @@ function parameters_function(;
     d_0::Real=0.02,                             # public subsidy in kid's education
     d_1::Real=0.09,                             # public subsidy in kid's education
     d_2::Real=0.10,                             # public subsidy in kid's education
-    κ::Real=0.19,                               # college cost
+    κ::Real=0.19,                               # college monetary cost
+    κ_tilde::Real=2/3,                          # college time cost
     #--------------------#
     # set in equilibrium #
     #--------------------#
@@ -55,18 +56,21 @@ function parameters_function(;
     c_size::Integer=2,                          # number of academic degree 
     ϵ_size::Integer=2,                          # number of market luck shock
     a_size::Integer=3,                          # number of learning ability shock
-    h_size::Integer=12,                         # number of human capital
+    h_size::Integer=6,                          # number of human capital
     h_power::Integer=2,                         # grid power of human capital
     h_frac::Real=20.0,                          # upper bound scale of human capital
-    h_k_frac::Real=0.25,                         # upper bound scale of kid's human capital
-    s_size::Integer=24,                         # number of asset choice
+    h_k_frac::Real=0.25,                        # upper bound scale of kid's human capital
+    s_size::Integer=12,                         # number of asset choice
     s_power::Integer=2,                         # grid power of asset choice
     s_frac::Real=6.0,                           # upper bound scale of asset choices
-    s_k_frac::Real=1.25,                         # upper bound scale of kid's asset choices
+    s_k_frac::Real=1.25,                        # upper bound scale of kid's asset choices
 )
     """
     contruct an immutable object of all paramters
     """
+    # adult consumption equivalance scale in model
+    q = (1.0 + θ^(1.0/χ))^χ
+
     # aggregate prices
     r = (1.0 + r_0)^age_periods - 1.0
     R = (1.0 + r_0 + δ)^age_periods - 1.0
@@ -117,6 +121,7 @@ function parameters_function(;
         τ_0 = τ_0,
         τ_1 = τ_1,
         g = g,
+        q = q,
         q_A = q_A,
         p_1 = p_1,
         p_0 = p_0,
@@ -126,6 +131,7 @@ function parameters_function(;
         d_1 = d_1,
         d_2 = d_2,
         κ = κ,
+        κ_tilde = κ_tilde,
         β = β,
         ν = ν,
         A = A,

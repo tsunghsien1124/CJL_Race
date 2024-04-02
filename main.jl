@@ -9,6 +9,7 @@ using DelimitedFiles
 # import Ipopt
 using Optim
 using ProgressMeter
+using BenchmarkTools
 
 #==================#
 # Import Functions #
@@ -18,6 +19,7 @@ include("parameters.jl")
 include("variables.jl")
 include("age_10.jl")
 include("age_9.jl")
+include("age_8.jl")
 
 #======#
 # Test #
@@ -28,3 +30,4 @@ variables = variables_function(prices, parameters);
 
 age_10_function!(variables, prices, parameters);
 age_9_function!(variables, prices, parameters);
+age_8_W_function!(variables, prices, parameters);

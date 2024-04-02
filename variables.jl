@@ -67,7 +67,7 @@ function variables_function(prices::Mutable_Prices, parameters::NamedTuple)
     policy_s_5 = zeros(s_size, h_size, a_size, c_size)
     policy_n_4 = zeros(s_size, h_size, a_size, c_size)
     for c_i = 1:c_size, h_i = 1:h_size, s_i = 1:s_size
-        c_4 = max(0.0, f_function(prices.w_S[c_i] * h_grid[h_i], s_grid[s_i], 4, parameters))
+        c_4 = max(0.0, f_function(prices.w_S[c_i] * h_grid[h_i], s_grid[s_i], 4, parameters)) - s_min
         V_4[s_i,h_i,:,c_i] .= utility_function(c_4, parameters)
     end
 
@@ -90,12 +90,12 @@ function variables_function(prices::Mutable_Prices, parameters::NamedTuple)
     policy_l_2 = zeros(a_size, h_size, c_size, a_size, h_size, s_size)
 
     # j = 8 (college decision)
-    V_8 = zeros(a_size, h_size, c_size, a_size, h_size, s_size)
-    W_8 = zeros(c_size, a_size, h_size, c_size, a_size, h_size, s_size)
-    policy_s_9 = zeros(c_size, a_size, h_size, c_size, a_size, h_size, s_size)
-    policy_n_8 = zeros(c_size, a_size, h_size, c_size, a_size, h_size, s_size)
-    policy_n_3 = zeros(c_size, a_size, h_size, c_size, a_size, h_size, s_size)
-    policy_c_3 = zeros(a_size, h_size, c_size, a_size, h_size, s_size)
+    V_8 = zeros(h_size, a_size, s_size, h_size, a_size, c_size)
+    W_8 = zeros(h_size, a_size, c_size, s_size, h_size, a_size, c_size)
+    policy_s_9 = zeros(h_size, a_size, c_size, s_size, h_size, a_size, c_size)
+    policy_n_8 = zeros(h_size, a_size, c_size, s_size, h_size, a_size, c_size)
+    policy_n_3 = zeros(h_size, a_size, c_size, s_size, h_size, a_size, c_size)
+    policy_c_3 = zeros(h_size, a_size, s_size, h_size, a_size, c_size)
 
     # j = 9 (inter vivos)
     V_9 = zeros(h_size, a_size, c_size, s_size, h_size, a_size, c_size)

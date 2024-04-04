@@ -60,13 +60,13 @@ function age_8_obj_function(choices::Vector{Float64}, states::Vector{Int64}, var
     n_8 = choices[1]
     h_8 = h_grid[h_i]
     a_8 = a_grid[a_i]
-    earnings_8 = prices.w_S[c_i] * h_8
+    earnings_8 = prices.w_S[c_i] * h_8 * (1.0 - n_8)
     h_9 = a_8 * (n_8 * h_8)^b + h_8
     s_8 = s_grid[s_i]
     n_k_3 = c_k_i == 2 ? κ_tilde + (1.0 - κ_tilde) * choices[3] : choices[3]
     h_k_3 = h_grid[h_k_i]
     a_k_3 = a_grid[a_k_i]
-    earnings_k_3 = prices.w_S[c_k_i] * h_k_3
+    earnings_k_3 = prices.w_S[c_k_i] * h_k_3 * (1.0 - n_k_3)
     h_k_4 = a_k_3 * (n_k_3 * h_k_3)^b + h_k_3
     budget = max(0.0, f_function(earnings_8, s_8, 8, parameters) + f_function(earnings_k_3, 0.0, 3, parameters) - s_min)
     s_9 = choices[2] * budget

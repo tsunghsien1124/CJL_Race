@@ -77,7 +77,7 @@ function age_9_obj_function(choices::Vector{Float64}, states::Vector{Int64}, var
     h_9 = h_grid[h_i]
     a_9 = a_grid[a_i]
     s_9 = s_grid[s_i]
-    earnings_9 = prices.w_S[c_i] * h_9
+    earnings_9 = prices.w_S[c_i] * h_9 * (1.0 - n_9)
     h_10 = a_9 * (n_9 * h_9)^b + h_9
     budget = max(0.0, f_function(earnings_9, s_9, 9, parameters) - s_min - s_k_min)
     s_10 = choices[2] * budget

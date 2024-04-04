@@ -22,10 +22,10 @@ end
 function age_7_obj_function(choices::Vector{Float64}, states::Vector{Int64}, variables::Mutable_Variables, prices::Mutable_Prices, parameters::NamedTuple)
     """
     construct the objective function at age 7
-        choices: (n_7, s_8, l_2)
+        choices: (n_7, l_2, s_8)
         states: (h_k_i, a_k_i, s_i, h_i, a_i, c_i)
     """
-    @unpack h_grid, a_grid, s_grid, β, b, s_min, q, γ_2, d_2 = parameters
+    @unpack h_grid, a_grid, s_grid, β, b, s_min, q, γ_2, d_2, ω_2 = parameters
 
     # check if the number of choices is correct
     if length(choices) != 3
@@ -39,23 +39,16 @@ function age_7_obj_function(choices::Vector{Float64}, states::Vector{Int64}, var
     l_2 = l_2 * (1.0 - n_7)
     h_7 = h_grid[h_i]
     a_7 = a_grid[a_i]
-    earnings_7 = prices.w_S[c_i] * h_7
+    earnings_7 = prices.w_S[c_i] * h_7 * (1.0 - n_7)
     h_8 = a_7 * (n_7 * h_7)^b + h_7
     s_7 = s_grid[s_i]
+    m_2 = prices.w_S[c_i] * h_7 * (1.0-γ_2) / γ_2 
+    x_2 = (γ_2 / prices.w_S[c_i])^γ_2 * (1.0 - γ_2)^(1.0 - γ_2) * (prices.w_S[c_i] * h_7 *l_2 + m_2 + d_2)
+    h_k_2 = h_grid[h_k_i]
+    a_k_2 = a_grid[a_k_i]
+    h_k_3 = x_2^ω_2 * h_k_2^(1.0-ω_2)
+    budget = max(0.0, f_function(earnings_7-m_2, s_7, 7, parameters) - s_min)
 
-    m_2 = earnings_7 * (1.0-γ_2) / γ_2 
-    x_2 = (γ_2 / prices.w_S[c_i])^γ_2 * (1.0 - γ_2)^(1.0 - γ_2) * (earnings_7*l_2 + m_2 + d_2)
-
-    h_k_3 = h_grid[h_k_i]
-    a_k_3 = a_grid[a_k_i]
-
-    mx = wp*lx *(1d0-kamk)/kamk
-	xx = lamk*(wp*lx + mx + ddk)
-	xx = zeta* xx
-
-	hkx = xx**omegk * hk**(1d0-omegk)
-
-    budget = max(0.0, f_function(earnings_8, s_8, 8, parameters) + f_function(earnings_k_3, 0.0, 3, parameters) - s_min)
     s_9 = choices[2] * budget
     c_8 = budget - s_9
     s_9 = s_9 + s_min

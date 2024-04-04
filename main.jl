@@ -30,4 +30,4 @@ variables = variables_function(prices, parameters);
 
 age_10_function!(variables, prices, parameters);
 age_9_function!(variables, prices, parameters);
-age_8_W_function!(variables, prices, parameters);
+age_8_function!(variables, prices, parameters);

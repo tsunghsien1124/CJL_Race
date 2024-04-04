@@ -1,35 +1,12 @@
-function age_8_function!(variables::Mutable_Variables, prices::Mutable_Prices, parameters::NamedTuple)
+function age_7_function!(variables::Mutable_Variables, prices::Mutable_Prices, parameters::NamedTuple)
     """
-    solve the household problem for kid's college decision
-    """
-    @unpack c_size, a_size, h_size, h_grid, s_size, ψ_1, ψ_2 = parameters
-
-    age_8_W_function!(variables, prices, parameters)
-
-    # V_8 = zeros(h_size, a_size, s_size, h_size, a_size, c_size)
-    for c_i = 1:c_size, a_i = 1:a_size, h_i = 1:h_size, s_i = 1:s_size, a_k_i = 1:a_size, h_k_i = 1:h_size
-        # states = [h_k_i, a_k_i, s_i, h_i, a_i, c_i]
-        ψ_aux = c_i == 1 ? ψ_1 : ψ_2
-        if variables.W_8[h_k_i, a_k_i, 1, s_i, h_i, a_i, c_i] > variables.W_8[h_k_i, a_k_i, 2, s_i, h_i, a_i, c_i] + ψ_aux
-            @inbounds variables.V_8[h_k_i, a_k_i, s_i, h_i, a_i, c_i] = variables.W_8[h_k_i, a_k_i, 1, s_i, h_i, a_i, c_i]
-            @inbounds variables.policy_c_3[h_k_i, a_k_i, s_i, h_i, a_i, c_i] = 0.0
-        else
-            @inbounds variables.V_8[h_k_i, a_k_i, s_i, h_i, a_i, c_i] = variables.W_8[h_k_i, a_k_i, 2, s_i, h_i, a_i, c_i] + ψ_aux
-            @inbounds variables.policy_c_3[h_k_i, a_k_i, s_i, h_i, a_i, c_i] = 1.0
-        end
-        # println(states)
-    end
-end
-
-function age_8_W_function!(variables::Mutable_Variables, prices::Mutable_Prices, parameters::NamedTuple)
-    """
-    solve the household problem given kid's college state
+    solve the household problem in period of child investment
     """
     @unpack c_size, a_size, h_size, h_grid, s_size = parameters
 
-    # W_8 = zeros(h_size, a_size, c_size, s_size, h_size, a_size, c_size)
-    for c_i = 1:c_size, a_i = 1:a_size, h_i = 1:h_size, s_i = 1:s_size, c_k_i = 1:c_size, a_k_i = 1:a_size, h_k_i = 1:h_size
-        states = [h_k_i, a_k_i, c_k_i, s_i, h_i, a_i, c_i]
+    # V_7 = zeros(h_size, a_size, s_size, h_size, a_size, c_size)
+    for c_i = 1:c_size, a_i = 1:a_size, h_i = 1:h_size, s_i = 1:s_size, a_k_i = 1:a_size, h_k_i = 1:h_size
+        states = [h_k_i, a_k_i, s_i, h_i, a_i, c_i]
         choices_initial = [0.5, 0.5, 0.5]
         choices_lb = [0.0, 0.0, 0.0]
         choices_ub = [1.0, 1.0, 1.0]
@@ -42,13 +19,13 @@ function age_8_W_function!(variables::Mutable_Variables, prices::Mutable_Prices,
     end
 end
 
-function age_8_obj_function(choices::Vector{Float64}, states::Vector{Int64}, variables::Mutable_Variables, prices::Mutable_Prices, parameters::NamedTuple)
+function age_7_obj_function(choices::Vector{Float64}, states::Vector{Int64}, variables::Mutable_Variables, prices::Mutable_Prices, parameters::NamedTuple)
     """
-    construct the objective function in age 8
-        choices: (n_8, s_9, n_k_3)
-        states: (h_k_i, a_k_i, c_k_i, s_i, h_i, a_i, c_i)
+    construct the objective function at age 7
+        choices: (n_7, s_8, l_2)
+        states: (h_k_i, a_k_i, s_i, h_i, a_i, c_i)
     """
-    @unpack h_grid, a_grid, s_grid, β, b, s_min, κ, κ_tilde, q = parameters
+    @unpack h_grid, a_grid, s_grid, β, b, s_min, q, γ_2, d_2 = parameters
 
     # check if the number of choices is correct
     if length(choices) != 3
@@ -56,18 +33,28 @@ function age_8_obj_function(choices::Vector{Float64}, states::Vector{Int64}, var
     end
 
     # compute implied value for the given choices
-    h_k_i, a_k_i, c_k_i, s_i, h_i, a_i, c_i = states
-    n_8 = choices[1]
-    h_8 = h_grid[h_i]
-    a_8 = a_grid[a_i]
-    earnings_8 = prices.w_S[c_i] * h_8
-    h_9 = a_8 * (n_8 * h_8)^b + h_8
-    s_8 = s_grid[s_i]
-    n_k_3 = c_k_i == 2 ? κ_tilde + (1.0 - κ_tilde) * choices[3] : choices[3]
+    h_k_i, a_k_i, s_i, h_i, a_i, c_i = states
+    n_7 = choices[1]
+    l_2 = choices[2]
+    l_2 = l_2 * (1.0 - n_7)
+    h_7 = h_grid[h_i]
+    a_7 = a_grid[a_i]
+    earnings_7 = prices.w_S[c_i] * h_7
+    h_8 = a_7 * (n_7 * h_7)^b + h_7
+    s_7 = s_grid[s_i]
+
+    m_2 = earnings_7 * (1.0-γ_2) / γ_2 
+    x_2 = (γ_2 / prices.w_S[c_i])^γ_2 * (1.0 - γ_2)^(1.0 - γ_2) * (earnings_7*l_2 + m_2 + d_2)
+
     h_k_3 = h_grid[h_k_i]
     a_k_3 = a_grid[a_k_i]
-    earnings_k_3 = prices.w_S[c_k_i] * h_k_3
-    h_k_4 = a_k_3 * (n_k_3 * h_k_3)^b + h_k_3
+
+    mx = wp*lx *(1d0-kamk)/kamk
+	xx = lamk*(wp*lx + mx + ddk)
+	xx = zeta* xx
+
+	hkx = xx**omegk * hk**(1d0-omegk)
+
     budget = max(0.0, f_function(earnings_8, s_8, 8, parameters) + f_function(earnings_k_3, 0.0, 3, parameters) - s_min)
     s_9 = choices[2] * budget
     c_8 = budget - s_9

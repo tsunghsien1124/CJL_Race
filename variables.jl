@@ -84,10 +84,10 @@ function variables_function(prices::Mutable_Prices, parameters::NamedTuple)
     policy_l_1 = zeros(a_size, h_size, c_size, a_size, h_size, s_size)
 
     # j = 7
-    V_7 = zeros(a_size, h_size, c_size, a_size, h_size, s_size)
-    policy_s_8 = zeros(a_size, h_size, c_size, a_size, h_size, s_size)
-    policy_n_7 = zeros(a_size, h_size, c_size, a_size, h_size, s_size)
-    policy_l_2 = zeros(a_size, h_size, c_size, a_size, h_size, s_size)
+    V_7 = zeros(h_size, a_size, s_size, h_size, a_size, c_size)
+    policy_s_8 = zeros(h_size, a_size, s_size, h_size, a_size, c_size)
+    policy_n_7 = zeros(h_size, a_size, s_size, h_size, a_size, c_size)
+    policy_l_2 = zeros(h_size, a_size, s_size, h_size, a_size, c_size)
 
     # j = 8 (college decision)
     V_8 = zeros(h_size, a_size, s_size, h_size, a_size, c_size)

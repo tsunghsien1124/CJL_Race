@@ -59,7 +59,7 @@ function V_5_itp_function(s_5::Real, h_5::Real, states::Vector{Int64}, variables
     V_5_temp = zeros(ϵ_size, 2)
     V_5_a_temp = zeros(a_size)
     s_ind, s_wgt = locate_s_function(s_5, parameters)
-    for a_i = 1:a_size
+    for a_k_i = 1:a_size
         for ϵ_i = 1:ϵ_size
             h_5_ϵ = ϵ_grid[ϵ_i, c_i] * h_5
             h_ind, h_wgt = locate_h_function(h_5_ϵ, parameters)

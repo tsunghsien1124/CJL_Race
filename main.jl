@@ -20,6 +20,8 @@ include("variables.jl")
 include("age_10.jl")
 include("age_9.jl")
 include("age_8.jl")
+include("age_7.jl")
+include("age_6.jl")
 
 #======#
 # Test #
@@ -31,3 +33,5 @@ variables = variables_function(prices, parameters);
 age_10_function!(variables, prices, parameters);
 age_9_function!(variables, prices, parameters);
 age_8_function!(variables, prices, parameters);
+age_7_function!(variables, prices, parameters);
+age_6_function!(variables, prices, parameters);

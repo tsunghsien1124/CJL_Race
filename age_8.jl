@@ -91,7 +91,7 @@ function V_9_itp_function(s_9::Real, h_9::Real, h_k_4::Real, states::Vector{Int6
     s_ind, s_wgt = locate_s_function(s_9, parameters)
     for ϵ_k_i = 1:ϵ_size
         h_k_4_ϵ = ϵ_grid[ϵ_k_i, c_k_i] * h_k_4
-        h_k_ind, h_k_wgt = locate_h_function(h_k_4_ϵ, parameters)
+        h_k_ind, h_k_wgt = locate_h_kid_function(h_k_4_ϵ, parameters)
         for ϵ_i = 1:ϵ_size
             h_9_ϵ = ϵ_grid[ϵ_i, c_i] * h_9
             h_ind, h_wgt = locate_h_function(h_9_ϵ, parameters)

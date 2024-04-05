@@ -139,8 +139,8 @@ function locate_h_kid_function(h_k::Real, parameters::NamedTuple)
         h_k: kid's human capital
         parameters: collection of parameters
     """
-    @unpack h_k_size, h_k_step, h_k_min, h_k_power, h_k_grid = parameters
-    h_k_ind_lower = max(1, min(h_k_size - 1, floor(Int, ((h_k - h_k_min) / h_k_step)^(1.0 / h_k_power) + 1)))
+    @unpack h_size, h_k_step, h_min, h_power, h_k_grid = parameters
+    h_k_ind_lower = max(1, min(h_size - 1, floor(Int, ((h_k - h_min) / h_k_step)^(1.0 / h_power) + 1)))
     h_k_ind_upper = h_k_ind_lower + 1
     h_k_wgt_lower = (h_k_grid[h_k_ind_upper] - h_k) / (h_k_grid[h_k_ind_upper] - h_k_grid[h_k_ind_lower])
     h_k_wgt_upper = 1.0 - h_k_wgt_lower

@@ -72,16 +72,16 @@ function variables_function(prices::Mutable_Prices, parameters::NamedTuple)
     end
 
     # j = 5 (child investment)
-    V_5 = zeros(a_size, c_size, a_size, h_size, s_size)
-    policy_s_6 = zeros(a_size, c_size, a_size, h_size, s_size)
-    policy_n_5 = zeros(a_size, c_size, a_size, h_size, s_size)
-    policy_l_0 = zeros(a_size, c_size, a_size, h_size, s_size)
+    V_5 = zeros(a_size, s_size, h_size, a_size, c_size)
+    policy_s_6 = zeros(a_size, s_size, h_size, a_size, c_size)
+    policy_n_5 = zeros(a_size, s_size, h_size, a_size, c_size)
+    policy_l_0 = zeros(a_size, s_size, h_size, a_size, c_size)
 
     # j = 6
-    V_6 = zeros(a_size, h_size, c_size, a_size, h_size, s_size)
-    policy_s_7 = zeros(a_size, h_size, c_size, a_size, h_size, s_size)
-    policy_n_6 = zeros(a_size, h_size, c_size, a_size, h_size, s_size)
-    policy_l_1 = zeros(a_size, h_size, c_size, a_size, h_size, s_size)
+    V_6 = zeros(h_size, a_size, s_size, h_size, a_size, c_size)
+    policy_s_7 = zeros(h_size, a_size, s_size, h_size, a_size, c_size)
+    policy_n_6 = zeros(h_size, a_size, s_size, h_size, a_size, c_size)
+    policy_l_1 = zeros(h_size, a_size, s_size, h_size, a_size, c_size)
 
     # j = 7
     V_7 = zeros(h_size, a_size, s_size, h_size, a_size, c_size)

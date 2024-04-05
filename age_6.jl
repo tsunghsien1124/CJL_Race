@@ -25,7 +25,7 @@ function age_6_obj_function(choices::Vector{Float64}, states::Vector{Int64}, var
         choices: (n_6, l_1, s_7)
         states: (h_k_i, a_k_i, s_i, h_i, a_i, c_i)
     """
-    @unpack h_grid, a_grid, s_grid, β, b, s_min, q, γ_1, d_1, ω_1 = parameters
+    @unpack h_grid, a_grid, s_grid, β, b, s_min, q, γ_1, d_1, ω_1, ζ = parameters
 
     # check if the number of choices is correct
     if length(choices) != 3
@@ -42,12 +42,13 @@ function age_6_obj_function(choices::Vector{Float64}, states::Vector{Int64}, var
     earnings_6 = prices.w_S[c_i] * h_6 * (1.0 - n_6 - l_1)
     h_7 = a_6 * (n_6 * h_6)^b + h_6
     s_6 = s_grid[s_i]
-    m_1 = prices.w_S[c_i] * h_6 * (1.0-γ_1) / γ_1 
-    x_1 = (γ_1 / prices.w_S[c_i])^γ_1 * (1.0 - γ_1)^(1.0 - γ_1) * (prices.w_S[c_i] * h_6 *l_1 + m_1 + d_1)
+    m_1 = prices.w_S[c_i] * h_6 * l_1 * (1.0 - γ_1) / γ_1
+    x_1 = (γ_1 / prices.w_S[c_i])^γ_1 * (1.0 - γ_1)^(1.0 - γ_1) * (prices.w_S[c_i] * h_6 * l_1 + m_1 + d_1)
+    x_1 = x_1 * ζ
     h_k_1 = h_grid[h_k_i]
     a_k_1 = a_grid[a_k_i]
-    h_k_2 = x_1^ω_1 * h_k_1^(1.0-ω_1)
-    budget = max(0.0, f_function(earnings_6-m_1, s_6, 6, parameters) - s_min)
+    h_k_2 = x_1^ω_1 * h_k_1^(1.0 - ω_1)
+    budget = max(0.0, f_function(earnings_6 - m_1, s_6, 6, parameters) - s_min)
     s_7 = choices[3] * budget
     c_6 = budget - s_7
     s_7 = s_7 + s_min

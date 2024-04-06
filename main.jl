@@ -62,6 +62,7 @@ end
 #=============#
 # Check Plots #
 #=============#
-# variables.policy_s_9[h_k_i, a_k_i, c_k_i, s_i, h_i, a_i, c_i]
-plot(parameters.s_grid, variables.policy_s_9[1, 1, 1, :, 2, 1, 1])
-plot!(parameters.s_grid, variables.policy_s_9[1, 1, 1, :, 2, 1, 2])
+# age 10
+h_ind_age_10 = parameters.h_size
+plot(parameters.s_grid, variables.V_10[:, h_ind_age_10, 1], label="high school")
+plot!(parameters.s_grid, variables.V_10[:, h_ind_age_10, 2], label="college")

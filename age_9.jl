@@ -3,7 +3,10 @@ function age_9_function!(variables::Mutable_Variables, prices::Mutable_Prices, p
     solve the financial transfer problem of households
     """
     @unpack c_size, a_size, h_size, h_grid, s_size = parameters
-
+    choices_initial = [0.5, 0.5, 0.5]
+    choices_lb = [0.0, 0.0, 0.0]
+    choices_ub = [1.0, 1.0, 1.0]
+    
     # V_9 = zeros(h_size, a_size, c_size, s_size, h_size, a_size, c_size)
     for c_i = 1:c_size, a_i = 1:a_size, h_i = 1:h_size, s_i = 1:s_size, c_k_i = 1:c_size, a_k_i = 1:a_size, h_k_i = 1:h_size
         states = [h_k_i, a_k_i, c_k_i, s_i, h_i, a_i, c_i]
@@ -13,9 +16,6 @@ function age_9_function!(variables::Mutable_Variables, prices::Mutable_Prices, p
         # # choices_initial = collect(choices_candidate[findmin(age_9_obj_function.(choices_candidate))[2]])
         # choices_initial[choices_initial .== 0.0] .= 0.1
         # choices_initial[choices_initial .== 1.0] .= 0.9
-        choices_initial = [0.5, 0.5, 0.5]
-        choices_lb = [0.0, 0.0, 0.0]
-        choices_ub = [1.0, 1.0, 1.0]
         res = optimize(choices -> age_9_obj_function(choices, states, variables, prices, parameters), choices_lb, choices_ub, choices_initial, Fminbox(NelderMead()));
         @inbounds variables.V_9[h_k_i, a_k_i, c_k_i, s_i, h_i, a_i, c_i] = -res.minimum
         @inbounds variables.policy_n_9[h_k_i, a_k_i, c_k_i, s_i, h_i, a_i, c_i] = res.minimizer[1]

@@ -108,6 +108,11 @@ function parameters_function(;
     s_k_max = s_max * s_k_frac
     s_k_step, s_k_grid = h_grid_function(s_size, s_k_min, s_k_max, s_power)
 
+    # labor choice
+    # n_step = 0.1
+    # n_grid = collect(0.0:n_step:1.0)
+    # n_size = length(n_grid)
+
     # return values
     return (
         χ = χ,
@@ -190,6 +195,9 @@ function parameters_function(;
         s_k_min = s_k_min,
         s_k_max = s_k_max,
         s_k_step = s_k_step, 
-        s_k_grid = s_k_grid,        
+        s_k_grid = s_k_grid,
+        # n_step = n_step,
+        # n_grid = n_grid,
+        # n_size = n_size,
     )
 end

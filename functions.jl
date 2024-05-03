@@ -116,13 +116,13 @@ function print_grid_function(grid::Vector{Float64}, filename::String)
     end
 end
 
-function locate_h_function(h::Real, parameters::NamedTuple)
+function locate_h_function(h::Real, grids::NamedTuple)
     """
     locate h on its grid with indices and convex weights
         h: human capital
         parameters: collection of parameters
     """
-    @unpack h_size, h_step, h_min, h_power, h_grid = parameters
+    @unpack h_size, h_step, h_min, h_power, h_grid = grids
     h_ind_lower = max(1, min(h_size - 1, floor(Int, ((h - h_min) / h_step)^(1.0 / h_power) + 1)))
     h_ind_upper = h_ind_lower + 1
     h_wgt_lower = (h_grid[h_ind_upper] - h) / (h_grid[h_ind_upper] - h_grid[h_ind_lower])
@@ -133,13 +133,13 @@ function locate_h_function(h::Real, parameters::NamedTuple)
     return h_ind, h_wgt
 end
 
-function locate_h_kid_function(h_k::Real, parameters::NamedTuple)
+function locate_h_kid_function(h_k::Real, grids::NamedTuple)
     """
     locate h_k on its grid with indices and convex weights
         h_k: kid's human capital
         parameters: collection of parameters
     """
-    @unpack h_size, h_k_step, h_min, h_power, h_k_grid = parameters
+    @unpack h_size, h_k_step, h_min, h_power, h_k_grid = grids
     h_k_ind_lower = max(1, min(h_size - 1, floor(Int, ((h_k - h_min) / h_k_step)^(1.0 / h_power) + 1)))
     h_k_ind_upper = h_k_ind_lower + 1
     h_k_wgt_lower = (h_k_grid[h_k_ind_upper] - h_k) / (h_k_grid[h_k_ind_upper] - h_k_grid[h_k_ind_lower])
@@ -150,13 +150,13 @@ function locate_h_kid_function(h_k::Real, parameters::NamedTuple)
     return h_k_ind, h_k_wgt
 end
 
-function locate_s_function(s::Real, parameters::NamedTuple)
+function locate_s_function(s::Real, grids::NamedTuple)
     """
     locate s on its grid with indices and convex weights
         s: savings
         parameters: collection of parameters
     """
-    @unpack s_size, s_step, s_min, s_power, s_grid = parameters
+    @unpack s_size, s_step, s_min, s_power, s_grid = grids
     s_ind_lower = max(1, min(s_size - 1, floor(Int, ((s - s_min) / s_step)^(1.0 / s_power) + 1)))
     s_ind_upper = s_ind_lower + 1
     s_wgt_lower = (s_grid[s_ind_upper] - s) / (s_grid[s_ind_upper] - s_grid[s_ind_lower])
@@ -167,13 +167,13 @@ function locate_s_function(s::Real, parameters::NamedTuple)
     return s_ind, s_wgt
 end
 
-function locate_s_kid_function(s_k, parameters::NamedTuple)
+function locate_s_kid_function(s_k, grids::NamedTuple)
     """
     locate s_k on its grid with indices and convex weights
         s_k: kid's savings
         parameters: collection of parameters
     """
-    @unpack s_size, s_k_step, s_k_min, s_power, s_k_grid = parameters
+    @unpack s_size, s_k_step, s_k_min, s_power, s_k_grid = grids
     s_k_ind_lower = max(1, min(s_size - 1, floor(Int, ((s_k - s_k_min) / s_k_step)^(1.0 / s_power) + 1))) # findlast(s_k .>= s_k_grid)
     s_k_ind_upper = s_k_ind_lower + 1
     s_k_wgt_lower = (s_k_grid[s_k_ind_upper] - s_k) / (s_k_grid[s_k_ind_upper] - s_k_grid[s_k_ind_lower])
@@ -199,22 +199,22 @@ function utility_function(c::Real, parameters::NamedTuple)
     end
 end
 
-function tax_rate_function(y::Real, parameters::NamedTuple)
+function tax_rate_function(y::Real, parameters::NamedTuple, prices::Mutable_Prices)
     """
     tax rate relative to mean income y_bar = e_bar + r*s_bar
         y: period income
         parameters: collection of parameters
     """
-    @unpack τ_0, τ_1, inc_bar = parameters
+    @unpack τ_0, τ_1 = parameters
     if y <= 0.0
         return 0.0
     else
-        tax_rate = τ_0 + τ_1 * log(y / inc_bar)
+        tax_rate = τ_0 + τ_1 * log(y / prices.inc_bar)
         return max(0.0, min(1.0, tax_rate))
     end
 end
 
-function f_function(e::Real, s::Real, j::Integer, parameters::NamedTuple)
+function f_function(e::Real, s::Real, j::Integer, parameters::NamedTuple, prices::Mutable_Prices)
     """
     after-tax income
         e: earnings
@@ -222,9 +222,9 @@ function f_function(e::Real, s::Real, j::Integer, parameters::NamedTuple)
         j: age
         parameters: collection of parameters
     """
-    @unpack r, τ_s, q_A, g = parameters
-    y = e + r * s
-    after_tax_income = (1.0 - tax_rate_function(y, parameters)) * y - (1.0 - τ_s) * e
+    @unpack τ_s, q_A, g = parameters
+    y = e + prices.r * s
+    after_tax_income = (1.0 - tax_rate_function(y, parameters, prices)) * y - (1.0 - τ_s) * e
     if (j == 5) || (j == 6) || (j == 7)
         return max(0.0, after_tax_income) + q_A * g
     else

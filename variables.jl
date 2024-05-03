@@ -2,14 +2,27 @@ mutable struct Mutable_Prices
     """
     construct a type for mutable prices (to be solved in general equlibrium)
     """
+    r::Float64
+    R::Float64
+    W::Float64
     w_S::Vector{Float64}
+    PSID_avg_earnings::Float64
+    e_bar::Float64
+    inc_bar::Float64
 end
 
 function prices_function(parameters::NamedTuple)
     """
     construct a mutable object containing equlibrium prices
     """
-    @unpack ν, σ, W = parameters
+    @unpack δ, α, A, ν, σ, age_periods = parameters
+
+    # risk-free rate
+    r_0 = 0.04
+    r = (1.0 + r_0)^age_periods - 1.0
+    R = (1.0 + r_0 + δ)^age_periods - 1.0
+    W_0 = (1.0 - α) * (α / R)^(α / (1.0 - α))
+    W = W_0 * A
 
     # degree-dependent wage
     EP = 1.57
@@ -19,8 +32,13 @@ function prices_function(parameters::NamedTuple)
     w_1 = w_0 * ratio_w_1_to_w_0
     w_S = [w_0, w_1]
 
+    # average earnings and income
+    PSID_avg_earnings = 38674.2                         # psidavgearn
+    e_bar = 1.0                                         # nmdlavgearn
+    inc_bar = e_bar * (1.0 + (r / R) * (α / (1.0 - α))) # nmdlavginc
+
     # return all variable placeholders
-    prices = Mutable_Prices(w_S)
+    prices = Mutable_Prices(r, R, W, w_S, PSID_avg_earnings, e_bar, inc_bar)
     return prices
 end
 
@@ -60,14 +78,14 @@ function variables_function(prices::Mutable_Prices, parameters::NamedTuple)
     """
     construct a mutable object containing endogenous variables
     """
-    @unpack c_size, a_size, h_size, h_grid, s_size, s_grid, s_min = parameters
+    @unpack c_size, a_size, h_size, h_grid, s_size, s_grid, s_min = grids
 
     # j = 4 (independece)
     V_4 = zeros(s_size, h_size, a_size, c_size)
     policy_s_5 = zeros(s_size, h_size, a_size, c_size)
     policy_n_4 = zeros(s_size, h_size, a_size, c_size)
     for c_i = 1:c_size, h_i = 1:h_size, s_i = 1:s_size
-        c_4 = max(0.0, f_function(prices.w_S[c_i] * h_grid[h_i], s_grid[s_i], 4, parameters)) - s_min
+        c_4 = max(0.0, f_function(prices.w_S[c_i] * h_grid[h_i], s_grid[s_i], 4, parameters, prices)) - s_min
         V_4[s_i,h_i,:,c_i] .= utility_function(c_4, parameters)
     end
 

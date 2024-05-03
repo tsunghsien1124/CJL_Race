@@ -1,16 +1,17 @@
-function age_6_function!(variables::Mutable_Variables, prices::Mutable_Prices, parameters::NamedTuple)
+function age_6_function!(variables::Mutable_Variables, prices::Mutable_Prices, parameters::NamedTuple, grids::NamedTuple)
     """
     solve the household problem in period of child investment at age 6
     """
-    @unpack c_size, a_size, h_size, h_grid, s_size = parameters
+    @unpack c_size, a_size, h_size, h_grid, s_size = grids
+
+    choices_initial = [0.5, 0.5, 0.5]
+    choices_lb = [0.0, 0.0, 0.0]
+    choices_ub = [1.0, 1.0, 1.0]
 
     # V_6 = zeros(h_size, a_size, s_size, h_size, a_size, c_size)
     for c_i = 1:c_size, a_i = 1:a_size, h_i = 1:h_size, s_i = 1:s_size, a_k_i = 1:a_size, h_k_i = 1:h_size
         states = [h_k_i, a_k_i, s_i, h_i, a_i, c_i]
-        choices_initial = [0.5, 0.5, 0.5]
-        choices_lb = [0.0, 0.0, 0.0]
-        choices_ub = [1.0, 1.0, 1.0]
-        res = optimize(choices -> age_6_obj_function(choices, states, variables, prices, parameters), choices_lb, choices_ub, choices_initial, Fminbox(NelderMead()))
+        res = optimize(choices -> age_6_obj_function(choices, states, variables, prices, parameters, grids), choices_lb, choices_ub, choices_initial, Fminbox(NelderMead()))
         @inbounds variables.V_6[h_k_i, a_k_i, s_i, h_i, a_i, c_i] = -res.minimum
         @inbounds variables.policy_n_6[h_k_i, a_k_i, s_i, h_i, a_i, c_i] = res.minimizer[1]
         @inbounds variables.policy_l_1[h_k_i, a_k_i, s_i, h_i, a_i, c_i] = res.minimizer[2]
@@ -19,13 +20,14 @@ function age_6_function!(variables::Mutable_Variables, prices::Mutable_Prices, p
     end
 end
 
-function age_6_obj_function(choices::Vector{Float64}, states::Vector{Int64}, variables::Mutable_Variables, prices::Mutable_Prices, parameters::NamedTuple)
+function age_6_obj_function(choices::Vector{Float64}, states::Vector{Int64}, variables::Mutable_Variables, prices::Mutable_Prices, parameters::NamedTuple, grids::NamedTuple)
     """
     construct the objective function at age 6
         choices: (n_6, l_1, s_7)
         states: (h_k_i, a_k_i, s_i, h_i, a_i, c_i)
     """
-    @unpack h_grid, a_grid, s_grid, β, b, s_min, q, γ_1, d_1, ω_1, ζ = parameters
+    @unpack β, b, q, γ_1, d_1, ω_1, ζ = parameters
+    @unpack h_grid, a_grid, s_grid, s_min = grids
 
     # check if the number of choices is correct
     if length(choices) != 3
@@ -48,15 +50,15 @@ function age_6_obj_function(choices::Vector{Float64}, states::Vector{Int64}, var
     h_k_1 = h_grid[h_k_i]
     a_k_1 = a_grid[a_k_i]
     h_k_2 = x_1^ω_1 * h_k_1^(1.0 - ω_1)
-    budget = max(0.0, f_function(earnings_6 - m_1, s_6, 6, parameters) - s_min)
+    budget = max(0.0, f_function(earnings_6 - m_1, s_6, 6, parameters, prices) - s_min)
     s_7 = choices[3] * budget
     c_6 = budget - s_7
     s_7 = s_7 + s_min
-    itp_V_7 = V_7_itp_function(s_7, h_7, h_k_2, states, variables, parameters)
+    itp_V_7 = V_7_itp_function(s_7, h_7, h_k_2, states, variables, grids)
     return -q * utility_function(c_6, parameters) - β * itp_V_7
 end
 
-function V_7_itp_function(s_7::Real, h_7::Real, h_k_2::Real, states::Vector{Int64}, variables::Mutable_Variables, parameters::NamedTuple)
+function V_7_itp_function(s_7::Real, h_7::Real, h_k_2::Real, states::Vector{Int64}, variables::Mutable_Variables, grids::NamedTuple)
     """
     interpolate value function at age 7
         s_7: savings made at age 6
@@ -64,15 +66,15 @@ function V_7_itp_function(s_7::Real, h_7::Real, h_k_2::Real, states::Vector{Int6
         h_k_2: imputed kid's human capital at age 6 prior to market luck shock
     """
     # V_7 = zeros(h_size, a_size, s_size, h_size, a_size, c_size)
-    @unpack ϵ_size, ϵ_grid = parameters
+    @unpack ϵ_size, ϵ_grid = grids
     h_k_i, a_k_i, s_i, h_i, a_i, c_i = states
     V_7_temp = zeros(ϵ_size, 3)
     V_7_h_k_temp = zeros(2)
-    s_ind, s_wgt = locate_s_function(s_7, parameters)
-    h_k_ind, h_k_wgt = locate_h_kid_function(h_k_2, parameters)
+    s_ind, s_wgt = locate_s_function(s_7, grids)
+    h_k_ind, h_k_wgt = locate_h_kid_function(h_k_2, grids)
     for ϵ_i = 1:ϵ_size
         h_7_ϵ = ϵ_grid[ϵ_i, c_i] * h_7
-        h_ind, h_wgt = locate_h_function(h_7_ϵ, parameters)
+        h_ind, h_wgt = locate_h_function(h_7_ϵ, grids)
         V_7_temp[ϵ_i, 1] = sum(s_wgt .* variables.V_7[h_k_ind[1], a_k_i, s_ind[1]:s_ind[2], h_ind[1], a_i, c_i])
         V_7_temp[ϵ_i, 2] = sum(s_wgt .* variables.V_7[h_k_ind[1], a_k_i, s_ind[1]:s_ind[2], h_ind[2], a_i, c_i])
         V_7_temp[ϵ_i, 1] = sum(h_wgt .* V_7_temp[ϵ_i, 1:2])

@@ -13,6 +13,8 @@ using BenchmarkTools
 using Plots
 using JLD2: @save, @load
 using Random
+using TimerOutputs
+tmr = TimerOutput()
 
 #==================#
 # Import Functions #
@@ -53,7 +55,8 @@ function VFI!(variables::Mutable_Variables, prices::Mutable_Prices, parameters::
     V_4_temp = similar(variables.V_4);
     while diff > crit
         copyto!(V_4_temp, variables.V_4);
-        age_9_function!(variables, prices, parameters, grids);
+        # @btime age_9_function!(variables, prices, parameters, grids);
+        age_9_function_th!(variables, prices, parameters, grids);
         age_8_function!(variables, prices, parameters, grids);
         age_7_function!(variables, prices, parameters, grids);
         age_6_function!(variables, prices, parameters, grids);

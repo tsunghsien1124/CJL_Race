@@ -125,12 +125,9 @@ function locate_h_function(h::Real, grids::NamedTuple)
     @unpack h_size, h_step, h_min, h_power, h_grid = grids
     h_ind_lower = max(1, min(h_size - 1, floor(Int, ((h - h_min) / h_step)^(1.0 / h_power) + 1)))
     h_ind_upper = h_ind_lower + 1
-    h_wgt_lower = (h_grid[h_ind_upper] - h) / (h_grid[h_ind_upper] - h_grid[h_ind_lower])
-    h_wgt_upper = 1.0 - h_wgt_lower
-    h_ind = [h_ind_lower, h_ind_upper]
-    h_wgt = [h_wgt_lower, h_wgt_upper]
-    h_wgt = max.(0.0, min.(1.0, h_wgt))
-    return h_ind, h_wgt
+    h_wgt_lower = max(0.0, min(1.0, (h_grid[h_ind_upper] - h) / (h_grid[h_ind_upper] - h_grid[h_ind_lower])))
+    # h_wgt_upper = 1.0 - h_wgt_lower
+    return h_ind_lower, h_wgt_lower #, h_ind_upper, h_wgt_upper
 end
 
 function locate_h_kid_function(h_k::Real, grids::NamedTuple)
@@ -159,12 +156,9 @@ function locate_s_function(s::Real, grids::NamedTuple)
     @unpack s_size, s_step, s_min, s_power, s_grid = grids
     s_ind_lower = max(1, min(s_size - 1, floor(Int, ((s - s_min) / s_step)^(1.0 / s_power) + 1)))
     s_ind_upper = s_ind_lower + 1
-    s_wgt_lower = (s_grid[s_ind_upper] - s) / (s_grid[s_ind_upper] - s_grid[s_ind_lower])
-    s_wgt_upper = 1.0 - s_wgt_lower
-    s_ind = [s_ind_lower, s_ind_upper]
-    s_wgt = [s_wgt_lower, s_wgt_upper]
-    s_wgt = max.(0.0, min.(1.0, s_wgt))
-    return s_ind, s_wgt
+    s_wgt_lower = max(0.0, min(1.0, (s_grid[s_ind_upper] - s) / (s_grid[s_ind_upper] - s_grid[s_ind_lower])))
+    # s_wgt_upper = 1.0 - s_wgt_lower
+    return s_ind_lower, s_wgt_lower #, s_ind_upper, s_wgt_upper
 end
 
 function locate_s_kid_function(s_k, grids::NamedTuple)
@@ -176,12 +170,9 @@ function locate_s_kid_function(s_k, grids::NamedTuple)
     @unpack s_size, s_k_step, s_k_min, s_power, s_k_grid = grids
     s_k_ind_lower = max(1, min(s_size - 1, floor(Int, ((s_k - s_k_min) / s_k_step)^(1.0 / s_power) + 1))) # findlast(s_k .>= s_k_grid)
     s_k_ind_upper = s_k_ind_lower + 1
-    s_k_wgt_lower = (s_k_grid[s_k_ind_upper] - s_k) / (s_k_grid[s_k_ind_upper] - s_k_grid[s_k_ind_lower])
-    s_k_wgt_upper = 1.0 - s_k_wgt_lower
-    s_k_ind = [s_k_ind_lower, s_k_ind_upper]
-    s_k_wgt = [s_k_wgt_lower, s_k_wgt_upper]
-    s_k_wgt = max.(0.0, min.(1.0, s_k_wgt))
-    return s_k_ind, s_k_wgt
+    s_k_wgt_lower = max(0.0, min(1.0, (s_k_grid[s_k_ind_upper] - s_k) / (s_k_grid[s_k_ind_upper] - s_k_grid[s_k_ind_lower])))
+    # s_k_wgt_upper = 1.0 - s_k_wgt_lower
+    return s_k_ind_lower, s_k_wgt_lower #, s_k_ind_upper, s_k_wgt_upper
 end
 
 function utility_function(c::Real, parameters::NamedTuple)

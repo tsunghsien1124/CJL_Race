@@ -24,7 +24,7 @@ include("variables.jl")
 include("grids.jl")
 include("functions.jl")
 include("age_10.jl")
-include("age_9.jl")
+include("age_9_new.jl")
 include("age_8.jl")
 include("age_7.jl")
 include("age_6.jl")
@@ -56,7 +56,7 @@ function VFI!(variables::Mutable_Variables, prices::Mutable_Prices, parameters::
     while diff > crit
         copyto!(V_4_temp, variables.V_4);
         # @btime age_9_function!(variables, prices, parameters, grids);
-        age_9_function_th!(variables, prices, parameters, grids);
+        @timeit tmr "age_9_func" age_9_function_th!(variables, prices, parameters, grids);
         age_8_function!(variables, prices, parameters, grids);
         age_7_function!(variables, prices, parameters, grids);
         age_6_function!(variables, prices, parameters, grids);

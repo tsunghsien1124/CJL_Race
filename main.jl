@@ -13,8 +13,10 @@ using BenchmarkTools
 using Plots
 using JLD2: @save, @load
 using Random
-using TimerOutputs
-tmr = TimerOutput()
+# using TimerOutputs
+# tmr = TimerOutput()
+using Optimization
+using OptimizationBBO
 
 #==================#
 # Import Functions #
@@ -24,7 +26,9 @@ include("variables.jl")
 include("grids.jl")
 include("functions.jl")
 include("age_10.jl")
-include("age_9_new.jl")
+# include("age_9.jl")
+# include("age_9_new.jl")
+include("age_9_new_2.jl")
 include("age_8.jl")
 include("age_7.jl")
 include("age_6.jl")
@@ -47,25 +51,28 @@ function VFI!(variables::Mutable_Variables, prices::Mutable_Prices, parameters::
     """
     conduct backward value function iterations
     """
-    age_10_function!(variables, prices, parameters, grids); # age 10 is deterministic
-    if load_initial_V_4 == true
-        @load "V_4_temp.jld2" V_4_temp
-        copyto!(variables.V_4, V_4_temp)
-    end
-    V_4_temp = similar(variables.V_4);
-    while diff > crit
-        copyto!(V_4_temp, variables.V_4);
+    # @unpack ϵ_size, ϵ_grid, c_size, a_size, a_grid, h_size, h_grid, s_size, s_grid, s_min, s_k_min, loop_age_10 = grids;
+    # V_10_temp = zeros(ϵ_size, 2, h_size, a_size, c_size, s_size, h_size, a_size, c_size);
+    @btime age_10_function!(variables, prices, parameters, grids); # age 10 is deterministic
+    # if load_initial_V_4 == true
+    #     @load "V_4_temp.jld2" V_4_temp
+    #     copyto!(variables.V_4, V_4_temp)
+    # end
+    # V_4_temp = similar(variables.V_4);
+    # while diff > crit
+        # copyto!(V_4_temp, variables.V_4);
         # @btime age_9_function!(variables, prices, parameters, grids);
-        @timeit tmr "age_9_func" age_9_function_th!(variables, prices, parameters, grids);
-        age_8_function!(variables, prices, parameters, grids);
-        age_7_function!(variables, prices, parameters, grids);
-        age_6_function!(variables, prices, parameters, grids);
-        age_5_function!(variables, prices, parameters, grids);
-        age_4_function!(variables, prices, parameters, grids);
-        diff = maximum(abs.(V_4_temp .- variables.V_4));
-        println(diff)
-    end
-    @save "V_4_temp.jld2" V_4_temp
+        @btime age_9_function_th!(variables, prices, parameters, grids);
+        # @btime age_9_function_th!(V_10_temp, variables, prices, parameters, grids);
+        # age_8_function!(variables, prices, parameters, grids);
+        # age_7_function!(variables, prices, parameters, grids);
+        # age_6_function!(variables, prices, parameters, grids);
+        # age_5_function!(variables, prices, parameters, grids);
+        # age_4_function!(variables, prices, parameters, grids);
+        # diff = maximum(abs.(V_4_temp .- variables.V_4));
+        # println(diff)
+    # end
+    # @save "V_4_temp.jld2" V_4_temp
 end
 VFI!(variables, prices, parameters, grids)
 
@@ -78,6 +85,7 @@ VFI!(variables, prices, parameters, grids)
 # Check Plots #
 #=============#
 # age 10
-h_ind_age_10 = grids.h_size
-plot(grids.s_grid, variables.V_10[:, h_ind_age_10, 1], label="high school")
-plot!(grids.s_grid, variables.V_10[:, h_ind_age_10, 2], label="college")
+# h_ind_age_10 = grids.h_size
+# plot(grids.s_grid, variables.V_10[:, h_ind_age_10, 1], label="high school")
+# plot!(grids.s_grid, variables.V_10[:, h_ind_age_10, 2], label="college")
+

@@ -1,4 +1,4 @@
-function ϵ_grid_function(ϵ_size::Integer, ϵ_μ::Vector{Float64}, ϵ_σ::Vector{Float64}, c_size::Integer)
+function ϵ_grid_function(ϵ_size::Int64, ϵ_μ::Vector{Float64}, ϵ_σ::Vector{Float64}, c_size::Int64)
     """
     generate ϵ grid using Kennan (2006)'s Proposition B
         ϵ_size: grid size of market luck shock
@@ -17,7 +17,7 @@ function ϵ_grid_function(ϵ_size::Integer, ϵ_μ::Vector{Float64}, ϵ_σ::Vecto
     return ϵ_grid
 end
 
-function a_grid_function(a_size::Integer, a_ρ::Real, a_σ::Real, a_μ::Real)
+function a_grid_function(a_size::Int64, a_ρ::Float64, a_σ::Float64, a_μ::Float64)
     """
     generate a grid using Rouwenhorst from QuantEcon
         a_size: grid size of ability shock
@@ -43,7 +43,7 @@ function a_grid_function(a_size::Integer, a_ρ::Real, a_σ::Real, a_μ::Real)
     return a_Γ, a_grid, a_birth
 end
 
-function h_grid_function(h_size::Integer, h_min::Real, h_max::Real, h_power::Real)
+function h_grid_function(h_size::Int64, h_min::Float64, h_max::Float64, h_power::Int64)
     """
     generate h power-grid
         h_size: grid size of human capital
@@ -59,7 +59,7 @@ function h_grid_function(h_size::Integer, h_min::Real, h_max::Real, h_power::Rea
     return h_step, h_grid
 end
 
-function h_k_grid_function(h_k_size::Integer, h_k_min::Real, h_k_max::Real, h_k_power::Real)
+function h_k_grid_function(h_k_size::Int64, h_k_min::Float64, h_k_max::Float64, h_k_power::Float64)
     """
     generate h_k power-grid
         h_k_size: grid size of kid's human capital
@@ -75,7 +75,7 @@ function h_k_grid_function(h_k_size::Integer, h_k_min::Real, h_k_max::Real, h_k_
     return h_k_step, h_k_grid
 end
 
-function s_grid_function(s_size::Integer, s_min::Real, s_max::Real, s_power::Real)
+function s_grid_function(s_size::Int64, s_min::Float64, s_max::Float64, s_power::Float64)
     """
     generate s power-grid
         s_size: grid size of savings
@@ -91,7 +91,7 @@ function s_grid_function(s_size::Integer, s_min::Real, s_max::Real, s_power::Rea
     return s_step, s_grid
 end
 
-function s_k_grid_function(s_k_size::Integer, s_k_min::Real, s_k_max::Real, s_k_power::Real)
+function s_k_grid_function(s_k_size::Int64, s_k_min::Float64, s_k_max::Float64, s_k_power::Real)
     """
     generate s power-grid
         s_k_size: grid size of kid's savings
@@ -116,7 +116,7 @@ function print_grid_function(grid::Vector{Float64}, filename::String)
     end
 end
 
-function locate_h_function(h::Real, grids::NamedTuple)
+function locate_h_function(h::Float64, grids::NamedTuple)
     """
     locate h on its grid with indices and convex weights
         h: human capital
@@ -130,7 +130,7 @@ function locate_h_function(h::Real, grids::NamedTuple)
     return h_ind_lower, h_wgt_lower #, h_ind_upper, h_wgt_upper
 end
 
-function locate_h_kid_function(h_k::Real, grids::NamedTuple)
+function locate_h_kid_function(h_k::Float64, grids::NamedTuple)
     """
     locate h_k on its grid with indices and convex weights
         h_k: kid's human capital
@@ -147,7 +147,7 @@ function locate_h_kid_function(h_k::Real, grids::NamedTuple)
     return h_k_ind, h_k_wgt
 end
 
-function locate_s_function(s::Real, grids::NamedTuple)
+function locate_s_function(s::Float64, grids::NamedTuple)
     """
     locate s on its grid with indices and convex weights
         s: savings
@@ -161,21 +161,49 @@ function locate_s_function(s::Real, grids::NamedTuple)
     return s_ind_lower, s_wgt_lower #, s_ind_upper, s_wgt_upper
 end
 
-function locate_s_kid_function(s_k, grids::NamedTuple)
+function locate_s_function!(s_ind_lower::Int64, s_wgt_lower::Float64, s::Float64, grids::NamedTuple)
+    """
+    locate s on its grid with indices and convex weights
+        s: savings
+        parameters: collection of parameters
+    """
+    @unpack s_size, s_step, s_min, s_power, s_grid = grids
+    s_ind_lower = max(1, min(s_size - 1, floor(Int, ((s - s_min) / s_step)^(1.0 / s_power) + 1)))
+    s_wgt_lower = max(0.0, min(1.0, (s_grid[s_ind_lower + 1] - s) / (s_grid[s_ind_lower + 1] - s_grid[s_ind_lower])))
+    return nothing
+end
+
+function locate_s_kid_function(s_k::Float64, grids::NamedTuple)
     """
     locate s_k on its grid with indices and convex weights
         s_k: kid's savings
         parameters: collection of parameters
     """
     @unpack s_size, s_k_step, s_k_min, s_power, s_k_grid = grids
-    s_k_ind_lower = max(1, min(s_size - 1, floor(Int, ((s_k - s_k_min) / s_k_step)^(1.0 / s_power) + 1))) # findlast(s_k .>= s_k_grid)
+    
+    s_k_ind_lower = max(1, min(s_size - 1, floor(Int, ((s_k - s_k_min) / s_k_step)^(1.0 / s_power) + 1)))
+    # s_k_ind_lower = findlast(s_k .>= s_k_grid)
+    # s_k_ind_lower = clamp(floor(Int, ((s_k - s_k_min) / s_k_step)^(1.0 / s_power) + 1), 1, s_size-1)
     s_k_ind_upper = s_k_ind_lower + 1
     s_k_wgt_lower = max(0.0, min(1.0, (s_k_grid[s_k_ind_upper] - s_k) / (s_k_grid[s_k_ind_upper] - s_k_grid[s_k_ind_lower])))
+    # s_k_wgt_lower = clamp((s_k_grid[s_k_ind_upper] - s_k) / (s_k_grid[s_k_ind_upper] - s_k_grid[s_k_ind_lower]), 0.0, 1.0)
     # s_k_wgt_upper = 1.0 - s_k_wgt_lower
     return s_k_ind_lower, s_k_wgt_lower #, s_k_ind_upper, s_k_wgt_upper
 end
 
-function utility_function(c::Real, parameters::NamedTuple)
+function locate_s_kid_function!(s_k_ind_lower::Int64, s_k_wgt_lower::Float64, s_k::Float64, grids::NamedTuple)
+    """
+    locate s_k on its grid with indices and convex weights
+        s_k: kid's savings
+        parameters: collection of parameters
+    """
+    @unpack s_size, s_k_step, s_k_min, s_power, s_k_grid = grids
+    s_k_ind_lower = max(1, min(s_size - 1, floor(Int, ((s_k - s_k_min) / s_k_step)^(1.0 / s_power) + 1)))
+    s_k_wgt_lower = max(0.0, min(1.0, (s_k_grid[s_k_ind_lower + 1] - s_k) / (s_k_grid[s_k_ind_lower + 1] - s_k_grid[s_k_ind_lower])))
+    return nothing
+end
+
+function utility_function(c::Float64, parameters::NamedTuple)
     """
     utility function with normalization factor
         c: comsumption
@@ -190,7 +218,7 @@ function utility_function(c::Real, parameters::NamedTuple)
     end
 end
 
-function tax_rate_function(y::Real, parameters::NamedTuple, prices::Mutable_Prices)
+function tax_rate_function(y::Float64, parameters::NamedTuple, prices::Mutable_Prices)
     """
     tax rate relative to mean income y_bar = e_bar + r*s_bar
         y: period income
@@ -205,7 +233,7 @@ function tax_rate_function(y::Real, parameters::NamedTuple, prices::Mutable_Pric
     end
 end
 
-function f_function(e::Real, s::Real, j::Integer, parameters::NamedTuple, prices::Mutable_Prices)
+function f_function(e::Float64, s::Float64, j::Int64, parameters::NamedTuple, prices::Mutable_Prices)
     """
     after-tax income
         e: earnings

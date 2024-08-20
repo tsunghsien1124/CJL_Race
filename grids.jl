@@ -2,19 +2,19 @@ function grids_function(parameters::NamedTuple, prices::Mutable_Prices;
     #-------------------------#
     # numerical specification #
     #-------------------------#
-    age_min::Integer=4,                         # min model age
-    age_max::Integer=12,                        # max model age
-    c_size::Integer=2,                          # number of academic degree 
-    ϵ_size::Integer=2,                          # number of market luck shock
-    a_size::Integer=3,                          # number of learning ability shock
-    h_size::Integer=6,                          # number of human capital
-    h_power::Integer=2,                         # grid power of human capital
-    h_frac::Real=20.0,                          # upper bound scale of human capital
-    h_k_frac::Real=0.25,                        # upper bound scale of kid's human capital
-    s_size::Integer=12,                         # number of asset choice
-    s_power::Integer=2,                         # grid power of asset choice
-    s_frac::Real=6.0,                           # upper bound scale of asset choices
-    s_k_frac::Real=1.25,                        # upper bound scale of kid's asset choices
+    age_min::Int64=4,                         # min model age
+    age_max::Int64=12,                        # max model age
+    c_size::Int64=2,                          # number of academic degree 
+    ϵ_size::Int64=2,                          # number of market luck shock
+    a_size::Int64=3,                          # number of learning ability shock
+    h_size::Int64=6,                          # number of human capital
+    h_power::Int64=2,                         # grid power of human capital
+    h_frac::Float64=20.0,                     # upper bound scale of human capital
+    h_k_frac::Float64=0.25,                   # upper bound scale of kid's human capital
+    s_size::Int64=12,                         # number of asset choice
+    s_power::Int64=2,                         # grid power of asset choice
+    s_frac::Float64=6.0,                      # upper bound scale of asset choices
+    s_k_frac::Float64=1.25,                   # upper bound scale of kid's asset choices
 )
     """
     contruct an immutable object of all grids
@@ -51,6 +51,9 @@ function grids_function(parameters::NamedTuple, prices::Mutable_Prices;
     # n_step = 0.1
     # n_grid = collect(0.0:n_step:1.0)
     # n_size = length(n_grid)
+
+    # loop index
+    loop_age_10 = collect(Iterators.product(1:c_size, 1:a_size, 1:h_size, 1:s_size, 1:c_size, 1:a_size, 1:h_size))
 
     # return values
     return (
@@ -90,5 +93,6 @@ function grids_function(parameters::NamedTuple, prices::Mutable_Prices;
         # n_step = n_step,
         # n_grid = n_grid,
         # n_size = n_size,
+        loop_age_10 = loop_age_10,
     )
 end

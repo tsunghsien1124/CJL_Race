@@ -11,7 +11,9 @@ function age_9_function_th!(variables::Mutable_Variables, prices::Mutable_Prices
     # h_9, a_9, s_9, w_c, h_10 = 0.0, 0.0, 0.0, 0.0, 0.0
 
     # V_9 = zeros(h_size, a_size, c_size, s_size, h_size, a_size, c_size)
-    Threads.@threads for (c_i, a_i, h_i, s_i, c_k_i, a_k_i, h_k_i) in loop_age_10
+    # Threads.@threads 
+    # @batch 
+    for (c_i, a_i, h_i, s_i, c_k_i, a_k_i, h_k_i) in loop_age_10
 
         h_9 = h_grid[h_i]
         a_9 = a_grid[a_i]
@@ -26,13 +28,13 @@ function age_9_function_th!(variables::Mutable_Variables, prices::Mutable_Prices
                 states: (h_k_i, a_k_i, c_k_i, s_i, h_i, a_i, c_i)
             """
             # @views @inbounds V_10_temp[:, :, h_k_i, a_k_i, c_k_i, s_i, h_i, a_i, c_i] .= 0.0
-
+        
             # results container
             # V_10_temp = zeros(ϵ_size, 2)
             V_10_temp = 0.0
             s_k_ind_lower, s_k_wgt_lower = 0, 0.0
             s_ind_lower, s_wgt_lower = 0, 0.0
-
+        
             # compute implied value for the given choices
             n_9 = choices[1]
             h_10 = a_9 * (n_9 * h_9)^b + h_9
@@ -43,12 +45,12 @@ function age_9_function_th!(variables::Mutable_Variables, prices::Mutable_Prices
             c_9 = budget - s_10 - s_4
             s_10 = s_10 + s_min
             s_4 = s_4 + s_k_min
-
+        
             # interpolate V_4
             s_k_ind_lower, s_k_wgt_lower = locate_s_kid_function(s_4, grids)
             # locate_s_kid_function!(s_k_ind_lower, s_k_wgt_lower, s_4, grids)
             @inbounds itp_V_4 = s_k_wgt_lower * variables.V_4[s_k_ind_lower, h_k_i, a_k_i, c_k_i] + (1.0 - s_k_wgt_lower) * variables.V_4[s_k_ind_lower+1, h_k_i, a_k_i, c_k_i]
-
+        
             # interpolate V_10
             # s_ind_lower, s_wgt_lower = locate_s_function(s_10, grids)
             locate_s_function!(s_ind_lower, s_wgt_lower, s_10, grids)
@@ -66,7 +68,7 @@ function age_9_function_th!(variables::Mutable_Variables, prices::Mutable_Prices
             end
             # @views @inbounds itp_V_10 = sum(V_10_temp[:, 1, h_k_i, a_k_i, c_k_i, s_i, h_i, a_i, c_i]) / ϵ_size
             @views @inbounds itp_V_10 = V_10_temp / ϵ_size
-
+        
             # return implied V_9 for the given choices
             return -utility_function(c_9, parameters) - θ * itp_V_4 - β * itp_V_10
         end

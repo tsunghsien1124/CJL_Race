@@ -250,3 +250,34 @@ function f_function(e::Float64, s::Float64, j::Int64, parameters::NamedTuple, pr
         return max(0.0, after_tax_income) + g
     end
 end
+
+function tax_rate_function(y::Float64, τ_0::Float64, τ_1::Float64, inc_bar::Float64)
+    """
+    tax rate relative to mean income y_bar = e_bar + r*s_bar
+        y: period income
+        parameters: collection of parameters
+    """
+    if y <= 0.0
+        return 0.0
+    else
+        tax_rate = τ_0 + τ_1 * log(y / inc_bar)
+        return max(0.0, min(1.0, tax_rate))
+    end
+end
+
+function f_function(e::Float64, s::Float64, j::Int64, r::Float64, inc_bar::Float64, τ_0::Float64, τ_1::Float64, τ_s::Float64, q_A::Float64, g::Float64)
+    """
+    after-tax income
+        e: earnings
+        s: savings
+        j: age
+        parameters: collection of parameters
+    """
+    y = e + r * s
+    after_tax_income = (1.0 - tax_rate_function(y, τ_0, τ_1, inc_bar)) * y - (1.0 - τ_s) * e
+    if (j == 5) || (j == 6) || (j == 7)
+        return max(0.0, after_tax_income) + q_A * g
+    else
+        return max(0.0, after_tax_income) + g
+    end
+end

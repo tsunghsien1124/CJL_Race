@@ -15,8 +15,12 @@ using JLD2: @save, @load
 using Random
 # using TimerOutputs
 # tmr = TimerOutput()
-using Optimization
-using OptimizationBBO
+# using Optimization
+# using OptimizationBBO
+using Polyester
+using Interpolations
+using JuMP
+import Ipopt
 
 #==================#
 # Import Functions #
@@ -28,7 +32,8 @@ include("functions.jl")
 include("age_10.jl")
 # include("age_9.jl")
 # include("age_9_new.jl")
-include("age_9_new_2.jl")
+# include("age_9_new_2.jl")
+include("age_9_new_3.jl")
 include("age_8.jl")
 include("age_7.jl")
 include("age_6.jl")
@@ -43,6 +48,7 @@ parameters = parameters_function();
 prices = prices_function(parameters);
 grids = grids_function(parameters, prices);
 variables = variables_function(prices, parameters);
+variables1 = variables_function(prices, parameters);
 
 #==========================#
 # Value Function Iteration #
@@ -62,7 +68,8 @@ function VFI!(variables::Mutable_Variables, prices::Mutable_Prices, parameters::
     # while diff > crit
         # copyto!(V_4_temp, variables.V_4);
         # @btime age_9_function!(variables, prices, parameters, grids);
-        @btime age_9_function_th!(variables, prices, parameters, grids);
+        # @btime age_9_function_th!(variables, prices, parameters, grids);
+        @btime age_9_function_th_1!(variables, prices, parameters, grids);
         # @btime age_9_function_th!(V_10_temp, variables, prices, parameters, grids);
         # age_8_function!(variables, prices, parameters, grids);
         # age_7_function!(variables, prices, parameters, grids);

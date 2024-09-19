@@ -209,12 +209,11 @@ function utility_function(c::Float64, parameters::NamedTuple)
         c: comsumption
         χ: CRRA coefficient
     """
-    @unpack β, θ, χ = parameters
+    @unpack β, θ, χ, normal_factor = parameters
     if c > 0.0
-        normal_factor = (1.0 - β) * (1 - β^5 * θ) / (1.0 - β^9)
         return normal_factor * (c^(1.0 - χ) / (1.0 - χ))
     else
-        return -Inf # -10.0^9
+        return -10.0^9
     end
 end
 

@@ -54,6 +54,9 @@ function parameters_function(;
     # adult consumption equivalance scale in model
     q = (1.0 + θ^(1.0 / χ))^χ
 
+    # normal factor for utility
+    normal_factor = (1.0 - β) * (1 - β^5 * θ) / (1.0 - β^9)
+
     # return values
     return (
         age_periods=age_periods,
@@ -96,5 +99,6 @@ function parameters_function(;
         ω_2=ω_2,
         ψ_1=ψ_1,
         ψ_2=ψ_2,
+        normal_factor=normal_factor,
     )
 end

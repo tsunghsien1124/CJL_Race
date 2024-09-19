@@ -8,6 +8,7 @@ using Parameters: @unpack
 # using JuMP
 # import Ipopt
 using Optim
+# using BlackBoxOptim
 using ProgressMeter
 using BenchmarkTools
 using Plots
@@ -19,8 +20,6 @@ using Random
 # using OptimizationBBO
 using Polyester
 using Interpolations
-using JuMP
-import Ipopt
 
 #==================#
 # Import Functions #
@@ -71,7 +70,7 @@ function VFI!(variables::Mutable_Variables, prices::Mutable_Prices, parameters::
         # @btime age_9_function_th!(variables, prices, parameters, grids);
         @btime age_9_function_th_1!(variables, prices, parameters, grids);
         # @btime age_9_function_th!(V_10_temp, variables, prices, parameters, grids);
-        # age_8_function!(variables, prices, parameters, grids);
+        # @btime age_8_function!(variables, prices, parameters, grids);
         # age_7_function!(variables, prices, parameters, grids);
         # age_6_function!(variables, prices, parameters, grids);
         # age_5_function!(variables, prices, parameters, grids);

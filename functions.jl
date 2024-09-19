@@ -214,7 +214,7 @@ function utility_function(c::Float64, parameters::NamedTuple)
         normal_factor = (1.0 - β) * (1 - β^5 * θ) / (1.0 - β^9)
         return normal_factor * (c^(1.0 - χ) / (1.0 - χ))
     else
-        return -10.0^9
+        return -Inf # -10.0^9
     end
 end
 

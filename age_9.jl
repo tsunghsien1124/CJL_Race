@@ -8,8 +8,8 @@ function age_9_function!(variables::Mutable_Variables, prices::Mutable_Prices, p
     choices_initial = [0.5, 0.5, 0.5]
     choices_lb = [0.0, 0.0, 0.0]
     choices_ub = [1.0, 1.0, 1.0]
-    @inbounds @views V_10_itp = linear_interpolation((s_grid, h_grid), zeros(s_size, h_size), extrapolation_bc=Line())
-    @inbounds @views V_4_itp = linear_interpolation(s_k_grid, zeros(s_size), extrapolation_bc=Line())
+    @inbounds @views V_10_itp = linear_interpolation((s_grid, h_grid), zeros(s_size, h_size), extrapolation_bc=Interpolations.Flat())
+    @inbounds @views V_4_itp = linear_interpolation(s_k_grid, zeros(s_size), extrapolation_bc=Interpolations.Flat())
 
     for c_i = 1:c_size
         @inbounds w_c = prices.w_S[c_i]

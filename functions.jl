@@ -213,7 +213,7 @@ function utility_function(c::Float64, parameters::NamedTuple)
     if c > 0.0
         return normal_factor * (c^(1.0 - χ) / (1.0 - χ))
     else
-        return -Inf # -10.0^9
+        return -10.0^9
     end
 end
 

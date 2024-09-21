@@ -18,8 +18,9 @@ using Random
 # tmr = TimerOutput()
 # using Optimization
 # using OptimizationBBO
-# using Polyester
+using Polyester
 using Interpolations
+# using LoopVectorization
 
 #==================#
 # Import Functions #
@@ -64,7 +65,7 @@ function VFI!(variables::Mutable_Variables, prices::Mutable_Prices, parameters::
     # while diff > crit
         # copyto!(V_4_temp, variables.V_4);
         age_9_function!(variables, prices, parameters, grids);
-        age_8_function!(variables, prices, parameters, grids);
+        # age_8_function!(variables, prices, parameters, grids);
         # age_7_function!(variables, prices, parameters, grids);
         # age_6_function!(variables, prices, parameters, grids);
         # age_5_function!(variables, prices, parameters, grids);

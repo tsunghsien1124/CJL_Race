@@ -18,7 +18,8 @@ function age_9_function!(variables::Mutable_Variables, prices::Mutable_Prices, p
         @inbounds EV_10_itp(s_10, h_10) = (V_10_itp(s_10, ϵ_c[1] * h_10) + V_10_itp(s_10, ϵ_c[2] * h_10)) / ϵ_size
         for c_k_i = 1:c_size, a_k_i = 1:a_size, h_k_i = 1:h_size
             @inbounds @views V_4_itp.itp.coefs .= variables.V_4[:, h_k_i, a_k_i, c_k_i]
-            for a_i = 1:a_size, h_i = 1:h_size, s_i = 1:s_size
+            # for a_i = 1:a_size, h_i = 1:h_size, s_i = 1:s_size
+            @batch for (a_i, h_i, s_i) in collect(Iterators.product(1:a_size, 1:h_size, 1:s_size))
                 @inbounds h_9 = h_grid[h_i]
                 @inbounds a_9 = a_grid[a_i]
                 @inbounds s_9 = s_grid[s_i]

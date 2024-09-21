@@ -23,7 +23,7 @@ function age_8_W_function!(variables::Mutable_Variables, prices::Mutable_Prices,
     """
     solve the household problem given kid's college state
     """
-    @unpack c_size, a_size, a_grid, h_size, h_grid, h_k_grid, s_size, s_grid, ϵ_size, ϵ_grid, s_min = grids
+    @unpack c_size, a_size, a_grid, h_size, h_grid, h_k_grid, s_size, s_grid, s_min, ϵ_size, ϵ_grid = grids
     @unpack b, q, β, κ_tilde = parameters
 
     choices_initial = [0.5, 0.5, 0.5]
@@ -34,14 +34,17 @@ function age_8_W_function!(variables::Mutable_Variables, prices::Mutable_Prices,
     for c_i = 1:c_size, c_k_i = 1:c_size
         @inbounds w_c = prices.w_S[c_i]
         @inbounds @views ϵ_c = ϵ_grid[:, c_i]
+        ϵ_c_mean = mean(ϵ_c)
         @inbounds w_c_k = prices.w_S[c_k_i]
         @inbounds @views ϵ_c_k = ϵ_grid[:, c_k_i]
+        ϵ_c_k_mean = mean(ϵ_c_k)
         for a_i = 1:a_size, a_k_i = 1:a_size
             @inbounds a_8 = a_grid[a_i]
             @inbounds a_k_3 = a_grid[a_k_i]
             @inbounds @views V_9_itp.itp.coefs .= variables.V_9[:, a_k_i, c_k_i, :, :, a_i, c_i]
-            @inbounds _V_9_itp(h_k_4, s_9, h_9) = (V_9_itp(h_k_4, s_9, ϵ_c[1] * h_9) + V_9_itp(h_k_4, s_9, ϵ_c[2] * h_9)) / ϵ_size
-            @inbounds EV_9_itp(h_k_4, s_9, h_9) = (_V_9_itp(ϵ_c_k[1] * h_k_4, s_9, h_9) + _V_9_itp(ϵ_c_k[2] * h_k_4, s_9, h_9)) / ϵ_size
+            # @inbounds _V_9_itp(h_k_4, s_9, h_9) = (V_9_itp(h_k_4, s_9, ϵ_c[1] * h_9) + V_9_itp(h_k_4, s_9, ϵ_c[2] * h_9)) / ϵ_size
+            # @inbounds EV_9_itp(h_k_4, s_9, h_9) = (_V_9_itp(ϵ_c_k[1] * h_k_4, s_9, h_9) + _V_9_itp(ϵ_c_k[2] * h_k_4, s_9, h_9)) / ϵ_size
+            EV_9_itp(h_k_4, s_9, h_9) = V_9_itp(ϵ_c_k_mean * h_k_4, s_9, ϵ_c_mean * h_9)
             for h_i = 1:h_size, s_i = 1:s_size, h_k_i = 1:h_size
                 @inbounds h_8 = h_grid[h_i]
                 @inbounds s_8 = s_grid[s_i]

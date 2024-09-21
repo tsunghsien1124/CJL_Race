@@ -84,10 +84,10 @@ function variables_function(prices::Mutable_Prices, parameters::NamedTuple)
     V_4 = zeros(s_size, h_size, a_size, c_size)
     policy_s_5 = zeros(s_size, h_size, a_size, c_size)
     policy_n_4 = zeros(s_size, h_size, a_size, c_size)
-    for c_i = 1:c_size, h_i = 1:h_size, s_i = 1:s_size
-        c_4 = max(0.0, f_function(prices.w_S[c_i] * h_grid[h_i], s_grid[s_i], 4, parameters, prices)) - s_min
-        V_4[s_i,h_i,:,c_i] .= utility_function(c_4, parameters)
-    end
+    # for c_i = 1:c_size, h_i = 1:h_size, s_i = 1:s_size
+    #     c_4 = max(0.0, f_function(prices.w_S[c_i] * h_grid[h_i], s_grid[s_i], 4, parameters, prices)) - s_min
+    #     V_4[s_i,h_i,:,c_i] .= utility_function(c_4, parameters)
+    # end
 
     # j = 5 (child investment)
     V_5 = zeros(a_size, s_size, h_size, a_size, c_size)

@@ -7,8 +7,10 @@ using Parameters: @unpack
 # using DelimitedFiles
 # using JuMP
 # import Ipopt
-using Optim
+# using Optim
 # using BlackBoxOptim
+using Optimization
+using OptimizationNLopt
 using ProgressMeter
 using BenchmarkTools
 using Plots
@@ -62,7 +64,7 @@ function VFI!(variables::Mutable_Variables, prices::Mutable_Prices, parameters::
     # while diff > crit
         # copyto!(V_4_temp, variables.V_4);
         @btime age_9_function!(variables, prices, parameters, grids);
-        # age_8_function!(variables, prices, parameters, grids);
+        @btime age_8_function!(variables, prices, parameters, grids);
         # age_7_function!(variables, prices, parameters, grids);
         # age_6_function!(variables, prices, parameters, grids);
         # age_5_function!(variables, prices, parameters, grids);

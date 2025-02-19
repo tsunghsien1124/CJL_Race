@@ -51,35 +51,34 @@ variables = variables_function(prices, parameters);
 #==========================#
 # Value Function Iteration #
 #==========================#
-function VFI!(variables::Mutable_Variables, prices::Mutable_Prices, parameters::NamedTuple, grids::NamedTuple; crit = 1E-6, diff = Inf, load_initial_V_4 = true)
+function VFI!(variables::Mutable_Variables, prices::Mutable_Prices, parameters::NamedTuple, grids::NamedTuple; crit = 1E-2, diff = Inf, load_initial_V_4 = true)
     """
     conduct backward value function iterations
     """
-    @btime age_10_function!(variables, prices, parameters, grids); # age 10 is deterministic
-    # if load_initial_V_4 == true
-    #     @load "V_4_temp.jld2" V_4_temp
-    #     copyto!(variables.V_4, V_4_temp)
-    # end
-    # V_4_temp = similar(variables.V_4);
-    # while diff > crit
-        # copyto!(V_4_temp, variables.V_4);
-        @btime age_9_function!(variables, prices, parameters, grids);
-        @btime age_8_function!(variables, prices, parameters, grids);
-        # age_7_function!(variables, prices, parameters, grids);
-        # age_6_function!(variables, prices, parameters, grids);
-        # age_5_function!(variables, prices, parameters, grids);
-        # age_4_function!(variables, prices, parameters, grids);
-        # diff = maximum(abs.(V_4_temp .- variables.V_4));
-        # println(diff)
-    # end
-    # @save "V_4_temp.jld2" V_4_temp
+    age_10_function!(variables, prices, parameters, grids); # age 10 is deterministic
+    if load_initial_V_4 == true
+        @load "V_4_temp.jld2" V_4_temp
+        copyto!(variables.V_4, V_4_temp)
+    end
+    V_4_temp = similar(variables.V_4);
+    while diff[1] > crit
+        copyto!(V_4_temp, variables.V_4);
+        age_9_function!(variables, prices, parameters, grids);
+        age_8_function!(variables, prices, parameters, grids);
+        age_7_function!(variables, prices, parameters, grids);
+        age_6_function!(variables, prices, parameters, grids);
+        age_5_function!(variables, prices, parameters, grids);
+        age_4_function!(variables, prices, parameters, grids);
+        diff = maximum(abs.(V_4_temp .- variables.V_4));
+    end
+    @save "V_4_temp.jld2" V_4_temp
 end
-VFI!(variables, prices, parameters, grids)
+@btime VFI!(variables, prices, parameters, grids)
 
 #============#
 # Simulation #
 #============#
-
+@btime simulation_function(variables, prices, parameters, grids; N=12000, T=1000);
 
 #=============#
 # Check Plots #

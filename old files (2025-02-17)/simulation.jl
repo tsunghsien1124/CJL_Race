@@ -45,7 +45,7 @@ function simulation_function(variables::Mutable_Variables, prices::Mutable_Price
     for ind_i = 1:N
         for T_i = 1:(T-1)
 
-            # println("HH $ind_i in time $T_i")
+            println("HH $ind_i in time $T_i")
 
             # (0) fixed over life cycle
             a_i = a_simul[ind_i, T_i]

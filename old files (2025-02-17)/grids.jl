@@ -2,7 +2,6 @@ function grids_function(parameters::NamedTuple, prices::Mutable_Prices;
     #-------------------------#
     # numerical specification #
     #-------------------------#
-    zero_min::Float64=0.01,                   # numerical zero
     age_min::Int64=4,                         # min model age
     age_max::Int64=12,                        # max model age
     c_size::Int64=2,                          # number of academic degree 
@@ -32,7 +31,7 @@ function grids_function(parameters::NamedTuple, prices::Mutable_Prices;
     a_Γ, a_grid, a_birth = a_grid_function(a_size, a_ρ, a_σ, a_μ)
 
     # human capital (parent and kid)
-    h_min = zero_min
+    h_min = 0.0
     h_max = prices.e_bar / prices.W * h_frac
     h_step, h_grid = h_grid_function(h_size, h_min, h_max, h_power)
 

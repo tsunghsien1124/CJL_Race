@@ -126,8 +126,8 @@ function locate_h_function(h::Float64, grids::NamedTuple)
     h_ind_lower = max(1, min(h_size - 1, floor(Int, ((h - h_min) / h_step)^(1.0 / h_power) + 1)))
     h_ind_upper = h_ind_lower + 1
     h_wgt_lower = max(0.0, min(1.0, (h_grid[h_ind_upper] - h) / (h_grid[h_ind_upper] - h_grid[h_ind_lower])))
-    # h_wgt_upper = 1.0 - h_wgt_lower
-    return h_ind_lower, h_wgt_lower #, h_ind_upper, h_wgt_upper
+    h_wgt_upper = 1.0 - h_wgt_lower
+    return [h_ind_lower, h_ind_upper], [h_wgt_lower, h_wgt_upper] 
 end
 
 function locate_h_kid_function(h_k::Float64, grids::NamedTuple)
@@ -157,8 +157,8 @@ function locate_s_function(s::Float64, grids::NamedTuple)
     s_ind_lower = max(1, min(s_size - 1, floor(Int, ((s - s_min) / s_step)^(1.0 / s_power) + 1)))
     s_ind_upper = s_ind_lower + 1
     s_wgt_lower = max(0.0, min(1.0, (s_grid[s_ind_upper] - s) / (s_grid[s_ind_upper] - s_grid[s_ind_lower])))
-    # s_wgt_upper = 1.0 - s_wgt_lower
-    return s_ind_lower, s_wgt_lower #, s_ind_upper, s_wgt_upper
+    s_wgt_upper = 1.0 - s_wgt_lower
+    return [s_ind_lower, s_ind_upper], [s_wgt_lower, s_wgt_upper]
 end
 
 function locate_s_function!(s_ind_lower::Int64, s_wgt_lower::Float64, s::Float64, grids::NamedTuple)
@@ -182,13 +182,13 @@ function locate_s_kid_function(s_k::Float64, grids::NamedTuple)
     @unpack s_size, s_k_step, s_k_min, s_power, s_k_grid = grids
     
     s_k_ind_lower = max(1, min(s_size - 1, floor(Int, ((s_k - s_k_min) / s_k_step)^(1.0 / s_power) + 1)))
-    # s_k_ind_lower = findlast(s_k .>= s_k_grid)
-    # s_k_ind_lower = clamp(floor(Int, ((s_k - s_k_min) / s_k_step)^(1.0 / s_power) + 1), 1, s_size-1)
+    s_k_ind_lower = findlast(s_k .>= s_k_grid)
+    s_k_ind_lower = clamp(floor(Int, ((s_k - s_k_min) / s_k_step)^(1.0 / s_power) + 1), 1, s_size-1)
     s_k_ind_upper = s_k_ind_lower + 1
     s_k_wgt_lower = max(0.0, min(1.0, (s_k_grid[s_k_ind_upper] - s_k) / (s_k_grid[s_k_ind_upper] - s_k_grid[s_k_ind_lower])))
-    # s_k_wgt_lower = clamp((s_k_grid[s_k_ind_upper] - s_k) / (s_k_grid[s_k_ind_upper] - s_k_grid[s_k_ind_lower]), 0.0, 1.0)
-    # s_k_wgt_upper = 1.0 - s_k_wgt_lower
-    return s_k_ind_lower, s_k_wgt_lower #, s_k_ind_upper, s_k_wgt_upper
+    s_k_wgt_lower = clamp((s_k_grid[s_k_ind_upper] - s_k) / (s_k_grid[s_k_ind_upper] - s_k_grid[s_k_ind_lower]), 0.0, 1.0)
+    s_k_wgt_upper = 1.0 - s_k_wgt_lower
+    return [s_k_ind_lower, s_k_ind_upper], [s_k_wgt_lower, s_k_wgt_upper]
 end
 
 function locate_s_kid_function!(s_k_ind_lower::Int64, s_k_wgt_lower::Float64, s_k::Float64, grids::NamedTuple)
